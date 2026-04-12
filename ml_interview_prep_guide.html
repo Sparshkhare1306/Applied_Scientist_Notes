@@ -1,0 +1,1505 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  :root {
+    --accent: #1a5f7a;
+    --accent2: #e85d04;
+    --bg: var(--color-background-primary);
+    --bg2: var(--color-background-secondary);
+    --bg3: var(--color-background-tertiary);
+    --text: var(--color-text-primary);
+    --text2: var(--color-text-secondary);
+    --border: var(--color-border-tertiary);
+    --border2: var(--color-border-secondary);
+    --success: var(--color-background-success);
+    --successt: var(--color-text-success);
+    --info: var(--color-background-info);
+    --infot: var(--color-text-info);
+    --warn: var(--color-background-warning);
+    --warnt: var(--color-text-warning);
+  }
+
+  body { font-family: var(--font-sans); color: var(--text); background: transparent; }
+
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--bg); border-bottom: 0.5px solid var(--border2);
+    padding: 0; overflow-x: auto; white-space: nowrap;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-inner { display: inline-flex; gap: 0; padding: 0 8px; }
+  .nav-btn {
+    background: none; border: none; cursor: pointer;
+    padding: 10px 14px; font-size: 12px; font-weight: 500;
+    color: var(--text2); border-bottom: 2px solid transparent;
+    transition: all .15s; white-space: nowrap;
+  }
+  .nav-btn:hover { color: var(--text); background: var(--bg2); }
+  .nav-btn.active { color: var(--text); border-bottom-color: var(--accent); }
+
+  .content { padding: 0 0 80px; }
+  .section { display: none; padding: 20px 16px; }
+  .section.active { display: block; }
+
+  h1 { font-family: 'Crimson Pro', serif; font-size: 26px; font-weight: 600; margin-bottom: 6px; }
+  h2 { font-size: 17px; font-weight: 500; margin: 24px 0 10px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border2); }
+  h3 { font-size: 14px; font-weight: 500; margin: 16px 0 6px; color: var(--text); }
+  p { font-size: 14px; line-height: 1.7; color: var(--text2); margin-bottom: 10px; }
+  
+  .hero {
+    background: var(--bg2); border-radius: 12px; padding: 20px;
+    border: 0.5px solid var(--border); margin-bottom: 20px;
+  }
+  .hero-subtitle { font-size: 13px; color: var(--text2); margin-top: 4px; }
+  
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .pill {
+    font-size: 11px; padding: 3px 10px; border-radius: 100px;
+    border: 0.5px solid var(--border2); color: var(--text2);
+    background: var(--bg2); cursor: pointer; transition: all .15s;
+  }
+  .pill:hover { background: var(--bg3); color: var(--text); }
+  .pill.ml { background: var(--info); color: var(--infot); border-color: transparent; }
+  .pill.dl { background: var(--warn); color: var(--warnt); border-color: transparent; }
+  .pill.stat { background: var(--success); color: var(--successt); border-color: transparent; }
+
+  .card {
+    background: var(--bg); border: 0.5px solid var(--border);
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 12px;
+  }
+  .card-header {
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer; user-select: none;
+  }
+  .card-title { font-size: 14px; font-weight: 500; flex: 1; }
+  .card-tag {
+    font-size: 10px; padding: 2px 8px; border-radius: 100px; font-weight: 500;
+  }
+  .tag-core { background: var(--info); color: var(--infot); }
+  .tag-algo { background: var(--warn); color: var(--warnt); }
+  .tag-concept { background: var(--success); color: var(--successt); }
+  .tag-math { background: #EEEDFE; color: #534AB7; }
+  .card-chevron { font-size: 11px; color: var(--text2); transition: transform .2s; }
+  .card.open .card-chevron { transform: rotate(90deg); }
+  .card-body { display: none; margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--border); }
+  .card.open .card-body { display: block; }
+
+  code {
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+    background: var(--bg2); padding: 1px 5px; border-radius: 4px;
+    color: var(--text);
+  }
+  pre {
+    background: var(--bg2); border-radius: 8px; padding: 12px 14px;
+    margin: 8px 0; overflow-x: auto; border: 0.5px solid var(--border);
+  }
+  pre code {
+    background: none; padding: 0; font-size: 12px; line-height: 1.6;
+    color: var(--text);
+  }
+
+  .formula {
+    background: var(--bg2); border-left: 3px solid var(--accent);
+    padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 10px 0;
+    font-family: 'IBM Plex Mono', monospace; font-size: 13px;
+    color: var(--text);
+  }
+
+  .info-box {
+    background: var(--info); border-radius: 8px; padding: 10px 14px;
+    margin: 8px 0; font-size: 13px; color: var(--infot);
+  }
+  .warn-box {
+    background: var(--warn); border-radius: 8px; padding: 10px 14px;
+    margin: 8px 0; font-size: 13px; color: var(--warnt);
+  }
+  .success-box {
+    background: var(--success); border-radius: 8px; padding: 10px 14px;
+    margin: 8px 0; font-size: 13px; color: var(--successt);
+  }
+
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
+  th { background: var(--bg2); padding: 8px 10px; text-align: left; font-weight: 500; font-size: 12px; border-bottom: 0.5px solid var(--border2); }
+  td { padding: 7px 10px; border-bottom: 0.5px solid var(--border); color: var(--text2); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 10px 0; }
+  @media (max-width: 600px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+
+  .metric-card {
+    background: var(--bg2); border-radius: 8px; padding: 12px;
+    text-align: center;
+  }
+  .metric-val { font-size: 22px; font-weight: 500; color: var(--text); }
+  .metric-label { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+  .qa-item {
+    border: 0.5px solid var(--border); border-radius: 8px;
+    margin-bottom: 8px; overflow: hidden;
+  }
+  .qa-q {
+    padding: 10px 14px; cursor: pointer; display: flex;
+    align-items: flex-start; gap: 10px; background: var(--bg);
+  }
+  .qa-num { font-size: 11px; font-weight: 500; color: var(--text2); min-width: 24px; padding-top: 1px; }
+  .qa-text { font-size: 13px; font-weight: 500; flex: 1; line-height: 1.5; }
+  .qa-chevron { font-size: 10px; color: var(--text2); transition: transform .2s; padding-top: 2px; }
+  .qa-item.open .qa-chevron { transform: rotate(90deg); }
+  .qa-a {
+    display: none; padding: 10px 14px 14px 48px;
+    font-size: 13px; line-height: 1.7; color: var(--text2);
+    border-top: 0.5px solid var(--border); background: var(--bg2);
+  }
+  .qa-item.open .qa-a { display: block; }
+
+  .progress-bar { background: var(--bg2); border-radius: 100px; height: 6px; margin: 4px 0; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 100px; background: var(--accent); transition: width .3s; }
+
+  .concept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin: 10px 0; }
+  .concept-chip {
+    background: var(--bg2); border: 0.5px solid var(--border);
+    border-radius: 8px; padding: 10px; text-align: center;
+    font-size: 12px; cursor: pointer; transition: all .15s;
+  }
+  .concept-chip:hover { background: var(--bg3); border-color: var(--border2); }
+  .concept-chip .icon { font-size: 18px; margin-bottom: 4px; }
+
+  .timeline { position: relative; padding-left: 20px; }
+  .timeline::before { content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 0.5px; background: var(--border2); }
+  .timeline-item { position: relative; margin-bottom: 16px; }
+  .timeline-dot { position: absolute; left: -17px; top: 4px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .timeline-title { font-size: 13px; font-weight: 500; }
+  .timeline-body { font-size: 12px; color: var(--text2); margin-top: 2px; line-height: 1.6; }
+
+  .search-box {
+    width: 100%; padding: 8px 12px; border-radius: 8px;
+    border: 0.5px solid var(--border2); background: var(--bg2);
+    font-size: 13px; color: var(--text); margin-bottom: 12px;
+  }
+  .search-box:focus { outline: none; border-color: var(--accent); }
+
+  .filter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .filter-btn {
+    font-size: 11px; padding: 4px 10px; border-radius: 100px;
+    border: 0.5px solid var(--border2); background: none;
+    cursor: pointer; color: var(--text2); transition: all .15s;
+  }
+  .filter-btn.active { background: var(--accent); color: white; border-color: transparent; }
+
+  .badge { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 4px; font-weight: 500; vertical-align: middle; margin-left: 4px; }
+  .badge-hot { background: #FAECE7; color: #993C1D; }
+  .badge-new { background: #EAF3DE; color: #3B6D11; }
+  .badge-hard { background: #FCEBEB; color: #A32D2D; }
+  
+  ul { padding-left: 18px; margin: 6px 0; }
+  li { font-size: 13px; color: var(--text2); margin-bottom: 4px; line-height: 1.6; }
+  li strong { color: var(--text); font-weight: 500; }
+  
+  .divider { border: none; border-top: 0.5px solid var(--border); margin: 16px 0; }
+  
+  .roadmap-step {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 12px; background: var(--bg2); border-radius: 8px; margin-bottom: 8px;
+  }
+  .step-num {
+    min-width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bg); border: 0.5px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 500;
+  }
+</style>
+
+<div class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showSection('overview')">Overview</button>
+    <button class="nav-btn" onclick="showSection('ml-core')">ML Core</button>
+    <button class="nav-btn" onclick="showSection('algorithms')">Algorithms</button>
+    <button class="nav-btn" onclick="showSection('dl')">Deep Learning</button>
+    <button class="nav-btn" onclick="showSection('stats')">Stats & Prob</button>
+    <button class="nav-btn" onclick="showSection('coding')">Coding & Systems</button>
+    <button class="nav-btn" onclick="showSection('questions')">Top 100 Q&A</button>
+    <button class="nav-btn" onclick="showSection('roadmap')">Study Roadmap</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- OVERVIEW -->
+<div id="section-overview" class="section active">
+  <div class="hero">
+    <h1>Applied Scientist Interview Prep</h1>
+    <p class="hero-subtitle">Amazon & Microsoft — ML Researcher Level | Complete Notes + Top 100 Q&A</p>
+  </div>
+
+  <div class="grid3">
+    <div class="metric-card"><div class="metric-val">8</div><div class="metric-label">Core topic areas</div></div>
+    <div class="metric-card"><div class="metric-val">100</div><div class="metric-label">Interview Q&A pairs</div></div>
+    <div class="metric-card"><div class="metric-val">50+</div><div class="metric-label">Algorithms covered</div></div>
+  </div>
+
+  <h2>What to expect at Amazon & Microsoft</h2>
+  <p>Applied Scientist roles at these companies require deep ML theory, strong coding (Python/SQL), system design for ML, and domain knowledge. Rounds typically include: coding (LC medium/hard), ML design, ML fundamentals, stats/probability, and behavioral (STAR method).</p>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Amazon specifics</div>
+        <div class="card-tag tag-core">AMZN</div>
+      </div>
+      <div style="margin-top:10px;">
+        <p style="font-size:13px;">Heavy emphasis on <strong>Leadership Principles</strong> in behavioral. Expect ranking/recommendation systems (search, ads), causal inference, A/B testing at scale, and NLP for Alexa/AWS. Bar raiser round is critical.</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Microsoft specifics</div>
+        <div class="card-tag tag-core">MSFT</div>
+      </div>
+      <div style="margin-top:10px;">
+        <p style="font-size:13px;">Focus on <strong>Azure ML, Bing, Copilot, Office AI</strong>. Expect LLM fine-tuning, responsible AI, large-scale data systems. Growth mindset culture. Cross-team collaboration questions common.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Topic coverage map</h2>
+  <div class="pill-row">
+    <span class="pill ml">Supervised Learning</span>
+    <span class="pill ml">Unsupervised Learning</span>
+    <span class="pill ml">Model Evaluation</span>
+    <span class="pill ml">Feature Engineering</span>
+    <span class="pill ml">Regularization</span>
+    <span class="pill ml">Optimization</span>
+    <span class="pill dl">Neural Networks</span>
+    <span class="pill dl">Transformers</span>
+    <span class="pill dl">CNNs / RNNs</span>
+    <span class="pill dl">LLMs & Fine-tuning</span>
+    <span class="pill dl">Diffusion Models</span>
+    <span class="pill stat">Probability</span>
+    <span class="pill stat">Bayesian Methods</span>
+    <span class="pill stat">Hypothesis Testing</span>
+    <span class="pill stat">A/B Testing</span>
+    <span class="pill stat">Causal Inference</span>
+    <span class="pill">Recommendation Systems</span>
+    <span class="pill">NLP</span>
+    <span class="pill">MLOps</span>
+    <span class="pill">SQL & Coding</span>
+  </div>
+
+  <h2>Quick navigation</h2>
+  <div class="concept-grid">
+    <div class="concept-chip" onclick="showSection('ml-core')"><div class="icon">🧠</div>ML Foundations</div>
+    <div class="concept-chip" onclick="showSection('algorithms')"><div class="icon">⚙️</div>Algorithms</div>
+    <div class="concept-chip" onclick="showSection('dl')"><div class="icon">🔥</div>Deep Learning</div>
+    <div class="concept-chip" onclick="showSection('stats')"><div class="icon">📊</div>Stats & Prob</div>
+    <div class="concept-chip" onclick="showSection('coding')"><div class="icon">💻</div>Coding</div>
+    <div class="concept-chip" onclick="showSection('questions')"><div class="icon">❓</div>Q&A Bank</div>
+    <div class="concept-chip" onclick="showSection('roadmap')"><div class="icon">🗺️</div>Roadmap</div>
+  </div>
+</div>
+
+<!-- ML CORE -->
+<div id="section-ml-core" class="section">
+  <h1>ML Foundations</h1>
+  <p>Everything from the bias-variance tradeoff to model evaluation. Master these cold.</p>
+
+  <!-- Bias-Variance -->
+  <div class="card" id="card-bv">
+    <div class="card-header" onclick="toggleCard('card-bv')">
+      <div class="card-title">Bias-Variance Tradeoff <span class="badge badge-hot">HOT</span></div>
+      <div class="card-tag tag-core">Core</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p>The expected prediction error decomposes into three parts:</p>
+      <div class="formula">
+        E[(y - ŷ)²] = Bias² + Variance + Irreducible Noise
+        
+        Bias  = E[ŷ] - y          (systematic error)
+        Variance = E[(ŷ - E[ŷ])²] (sensitivity to training data)
+      </div>
+      <table>
+        <tr><th>Scenario</th><th>Bias</th><th>Variance</th><th>Fix</th></tr>
+        <tr><td>Underfitting</td><td>High</td><td>Low</td><td>More features, complex model</td></tr>
+        <tr><td>Overfitting</td><td>Low</td><td>High</td><td>Regularize, more data, dropout</td></tr>
+        <tr><td>Just right</td><td>Low</td><td>Low</td><td>—</td></tr>
+      </table>
+      <div class="info-box">💡 <strong>Interview tip:</strong> Always mention that adding more training data reduces variance but not bias. Increasing model complexity trades bias for variance.</div>
+      <h3>Diagnosing via learning curves</h3>
+      <ul>
+        <li>High bias: both train and val error are high and converge</li>
+        <li>High variance: large gap between train (low) and val (high) error</li>
+        <li>Good fit: train ≈ val, both acceptably low</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Regularization -->
+  <div class="card" id="card-reg">
+    <div class="card-header" onclick="toggleCard('card-reg')">
+      <div class="card-title">Regularization — L1, L2, Elastic Net</div>
+      <div class="card-tag tag-core">Core</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="formula">
+L2 (Ridge): Loss = MSE + λ·Σwᵢ²       → shrinks all weights, never zero
+L1 (Lasso): Loss = MSE + λ·Σ|wᵢ|      → sparse weights, feature selection
+Elastic Net: Loss = MSE + λ₁·Σ|wᵢ| + λ₂·Σwᵢ²  → best of both
+      </div>
+      <table>
+        <tr><th>Method</th><th>Sparsity</th><th>Handles correlated features</th><th>Use when</th></tr>
+        <tr><td>L2 Ridge</td><td>No</td><td>Yes (groups)</td><td>All features relevant</td></tr>
+        <tr><td>L1 Lasso</td><td>Yes</td><td>Picks one, drops rest</td><td>Feature selection needed</td></tr>
+        <tr><td>Elastic Net</td><td>Partial</td><td>Yes</td><td>Many features, some correlated</td></tr>
+      </table>
+      <h3>Why L1 induces sparsity — geometric intuition</h3>
+      <p>The L1 ball is a diamond shape with corners on the axes. Contours of the loss function are likely to touch these corners first, forcing some weights to exactly zero. L2's circular ball has no corners, so optimal points are rarely exactly zero.</p>
+    </div>
+  </div>
+
+  <!-- Model Evaluation -->
+  <div class="card" id="card-eval">
+    <div class="card-header" onclick="toggleCard('card-eval')">
+      <div class="card-title">Model Evaluation & Metrics <span class="badge badge-hot">HOT</span></div>
+      <div class="card-tag tag-core">Core</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>Classification metrics</h3>
+      <div class="formula">
+Precision = TP / (TP + FP)      → of predicted positives, how many are correct?
+Recall    = TP / (TP + FN)      → of actual positives, how many did we find?
+F1        = 2 · (P·R) / (P+R)   → harmonic mean, balances precision & recall
+AUC-ROC   = P(score_pos > score_neg) → threshold-invariant ranking quality
+      </div>
+      <div class="warn-box">⚠️ Use <strong>AUC-PR</strong> (Precision-Recall curve) for <strong>imbalanced datasets</strong>, not AUC-ROC — ROC is overly optimistic when negatives vastly outnumber positives.</div>
+      <h3>When to use which metric</h3>
+      <table>
+        <tr><th>Use case</th><th>Metric</th><th>Why</th></tr>
+        <tr><td>Fraud detection</td><td>Recall + AUC-PR</td><td>Missing fraud (FN) is costly</td></tr>
+        <tr><td>Spam filter</td><td>Precision</td><td>Blocking legit email (FP) is costly</td></tr>
+        <tr><td>Medical screening</td><td>Recall / Sensitivity</td><td>Missing disease is costly</td></tr>
+        <tr><td>Ranking (search)</td><td>NDCG, MRR, MAP</td><td>Position matters</td></tr>
+        <tr><td>Regression</td><td>RMSE, MAE, R²</td><td>RMSE penalizes outliers more</td></tr>
+      </table>
+      <h3>Cross-validation</h3>
+      <ul>
+        <li><strong>k-fold CV:</strong> Split into k folds, train on k-1, validate on 1. Rotate. Average results.</li>
+        <li><strong>Stratified k-fold:</strong> Maintains class distribution per fold. Use for imbalanced data.</li>
+        <li><strong>Leave-one-out (LOO):</strong> k = n. Expensive but low bias. For small datasets.</li>
+        <li><strong>Time series split:</strong> Only use past data to predict future. Never shuffle time series!</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Feature Engineering -->
+  <div class="card" id="card-feat">
+    <div class="card-header" onclick="toggleCard('card-feat')">
+      <div class="card-title">Feature Engineering & Selection</div>
+      <div class="card-tag tag-concept">Concept</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>Encoding categorical variables</h3>
+      <ul>
+        <li><strong>One-hot encoding:</strong> Low-cardinality features. Creates n binary columns.</li>
+        <li><strong>Label encoding:</strong> Ordinal features only (Small=0, Med=1, Large=2).</li>
+        <li><strong>Target encoding:</strong> Replace category with mean target value. Risk: data leakage — do within CV folds.</li>
+        <li><strong>Embeddings:</strong> High-cardinality categories in neural networks.</li>
+      </ul>
+      <h3>Handling missing values</h3>
+      <ul>
+        <li>MCAR: Missing completely at random → simple imputation ok</li>
+        <li>MAR: Missing at random (depends on other features) → model-based imputation</li>
+        <li>MNAR: Missing not at random → needs domain knowledge, may be informative</li>
+      </ul>
+      <h3>Feature selection methods</h3>
+      <table>
+        <tr><th>Type</th><th>Method</th><th>Pros</th></tr>
+        <tr><td>Filter</td><td>Correlation, mutual information, χ²</td><td>Fast, no model needed</td></tr>
+        <tr><td>Wrapper</td><td>RFE, forward/backward selection</td><td>Model-specific, better</td></tr>
+        <tr><td>Embedded</td><td>L1 Lasso, tree feature importance</td><td>Efficient, integrated</td></tr>
+      </table>
+      <h3>Scaling</h3>
+      <ul>
+        <li><strong>StandardScaler:</strong> Zero mean, unit variance. Use for SVM, linear models, PCA.</li>
+        <li><strong>MinMaxScaler:</strong> [0,1] range. Use for neural networks, when distribution unknown.</li>
+        <li><strong>RobustScaler:</strong> Uses IQR. Use when outliers present.</li>
+        <li><strong>Log transform:</strong> For right-skewed distributions (income, count data).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Optimization -->
+  <div class="card" id="card-opt">
+    <div class="card-header" onclick="toggleCard('card-opt')">
+      <div class="card-title">Optimization — Gradient Descent & Variants <span class="badge badge-hot">HOT</span></div>
+      <div class="card-tag tag-math">Math</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="formula">
+Batch GD:    w ← w - η · ∇L(w; all data)
+Stochastic:  w ← w - η · ∇L(w; xᵢ, yᵢ)    (noisy, fast updates)
+Mini-batch:  w ← w - η · ∇L(w; batch)       (best of both)
+
+Momentum:    v ← βv + ∇L;  w ← w - η·v
+Adam:        m̂ = m/(1-β₁ᵗ);  v̂ = v/(1-β₂ᵗ)
+             w ← w - η·m̂/(√v̂ + ε)
+      </div>
+      <table>
+        <tr><th>Optimizer</th><th>Adapts lr?</th><th>Momentum?</th><th>Best for</th></tr>
+        <tr><td>SGD</td><td>No</td><td>Optional</td><td>CV, when tuned well</td></tr>
+        <tr><td>Adam</td><td>Yes</td><td>Yes</td><td>NLP, general</td></tr>
+        <tr><td>AdamW</td><td>Yes</td><td>Yes</td><td>Transformers (decoupled WD)</td></tr>
+        <tr><td>RMSProp</td><td>Yes</td><td>No</td><td>RNNs</td></tr>
+        <tr><td>Adagrad</td><td>Yes (decays)</td><td>No</td><td>Sparse features</td></tr>
+      </table>
+      <h3>Learning rate schedules</h3>
+      <ul>
+        <li><strong>Step decay:</strong> Reduce by factor every N epochs</li>
+        <li><strong>Cosine annealing:</strong> Smooth decay following cosine curve</li>
+        <li><strong>Warmup + cosine:</strong> Standard for transformer training</li>
+        <li><strong>Cyclical LR:</strong> Smith 2017 — cycles between min and max lr</li>
+      </ul>
+      <div class="info-box">💡 Saddle points are far more common than local minima in high-dimensional spaces. Gradient descent escapes saddle points with noise (mini-batch) and momentum.</div>
+    </div>
+  </div>
+
+  <!-- Class Imbalance -->
+  <div class="card" id="card-imb">
+    <div class="card-header" onclick="toggleCard('card-imb')">
+      <div class="card-title">Class Imbalance — Handling Skewed Data</div>
+      <div class="card-tag tag-concept">Concept</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>Data-level methods</h3>
+      <ul>
+        <li><strong>SMOTE:</strong> Synthetic Minority Over-sampling — interpolates between minority samples in feature space</li>
+        <li><strong>Random oversampling:</strong> Duplicate minority samples (risk: overfitting)</li>
+        <li><strong>Random undersampling:</strong> Remove majority samples (risk: information loss)</li>
+        <li><strong>Tomek links:</strong> Remove majority samples near decision boundary</li>
+      </ul>
+      <h3>Algorithm-level methods</h3>
+      <ul>
+        <li><strong>Class weights:</strong> <code>class_weight='balanced'</code> in sklearn — inversely proportional to frequency</li>
+        <li><strong>Threshold tuning:</strong> Move decision threshold from 0.5 based on cost matrix</li>
+        <li><strong>Focal loss:</strong> Down-weights easy examples, focuses on hard ones (used in RetinaNet)</li>
+      </ul>
+      <div class="formula">Focal Loss = -αₜ(1-pₜ)^γ · log(pₜ)   where γ=2 typical</div>
+    </div>
+  </div>
+</div>
+
+<!-- ALGORITHMS -->
+<div id="section-algorithms" class="section">
+  <h1>ML Algorithms</h1>
+  <p>Every algorithm you need to know deeply — math, intuition, pros/cons, and implementation.</p>
+
+  <!-- Linear Regression -->
+  <div class="card" id="card-linreg">
+    <div class="card-header" onclick="toggleCard('card-linreg')">
+      <div class="card-title">Linear & Logistic Regression</div>
+      <div class="card-tag tag-algo">Algorithm</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>Linear Regression</h3>
+      <div class="formula">
+ŷ = Xw + b
+Closed form: w* = (XᵀX)⁻¹Xᵀy   (O(n·d²) — only for small d)
+Gradient:    ∇L = (2/n)Xᵀ(Xw - y)
+      </div>
+      <h3>Logistic Regression</h3>
+      <div class="formula">
+σ(z) = 1/(1+e⁻ᶻ)    (sigmoid)
+P(y=1|x) = σ(wᵀx + b)
+Loss = -[y·log(ŷ) + (1-y)·log(1-ŷ)]   (Binary Cross-Entropy)
+Gradient: ∂L/∂w = (1/n)Xᵀ(ŷ - y)    (elegant — same form as linear!)
+      </div>
+      <h3>Assumptions of linear regression</h3>
+      <ul>
+        <li>Linearity: E[y|x] is linear in x</li>
+        <li>Independence: residuals are independent</li>
+        <li>Homoscedasticity: constant residual variance</li>
+        <li>Normality: residuals ~ N(0, σ²) [for inference, not prediction]</li>
+        <li>No multicollinearity (check VIF &lt; 10)</li>
+      </ul>
+      <pre><code>from sklearn.linear_model import LogisticRegression, Ridge
+model = LogisticRegression(C=1.0, penalty='l2', solver='lbfgs')
+model.fit(X_train, y_train)
+proba = model.predict_proba(X_test)[:, 1]</code></pre>
+    </div>
+  </div>
+
+  <!-- SVM -->
+  <div class="card" id="card-svm">
+    <div class="card-header" onclick="toggleCard('card-svm')">
+      <div class="card-title">Support Vector Machines (SVM)</div>
+      <div class="card-tag tag-algo">Algorithm</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p>Finds the maximum-margin hyperplane separating classes. Only support vectors (points closest to boundary) determine the hyperplane.</p>
+      <div class="formula">
+Primal: min ½||w||² subject to yᵢ(wᵀxᵢ + b) ≥ 1
+Dual:   max Σαᵢ - ½ΣΣαᵢαⱼyᵢyⱼxᵢᵀxⱼ
+        s.t. Σαᵢyᵢ = 0, 0 ≤ αᵢ ≤ C
+
+Kernel trick: K(xᵢ, xⱼ) = φ(xᵢ)ᵀφ(xⱼ)  (no explicit φ needed)
+      </div>
+      <table>
+        <tr><th>Kernel</th><th>Formula</th><th>Use when</th></tr>
+        <tr><td>Linear</td><td>xᵀz</td><td>High-dim, linearly separable</td></tr>
+        <tr><td>RBF/Gaussian</td><td>exp(-γ||x-z||²)</td><td>General purpose</td></tr>
+        <tr><td>Polynomial</td><td>(γxᵀz + r)^d</td><td>Image features</td></tr>
+        <tr><td>Sigmoid</td><td>tanh(γxᵀz + r)</td><td>Neural net-like</td></tr>
+      </table>
+      <div class="warn-box">⚠️ SVM scales as O(n²) to O(n³). Not suitable for &gt;100k samples. Use SGDClassifier with hinge loss instead.</div>
+    </div>
+  </div>
+
+  <!-- Decision Trees -->
+  <div class="card" id="card-dt">
+    <div class="card-header" onclick="toggleCard('card-dt')">
+      <div class="card-title">Decision Trees, Random Forests & Boosting <span class="badge badge-hot">HOT</span></div>
+      <div class="card-tag tag-algo">Algorithm</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>Decision tree splitting criteria</h3>
+      <div class="formula">
+Gini: G = 1 - Σpᵢ²            (default in sklearn)
+Entropy/IG: H = -Σpᵢ·log₂(pᵢ)
+IG(S, A) = H(S) - Σ(|Sᵥ|/|S|)·H(Sᵥ)
+Variance reduction (regression): Var(parent) - weighted Var(children)
+      </div>
+      <h3>Random Forest — why it works</h3>
+      <ul>
+        <li>Bagging: bootstrap samples → decorrelates trees</li>
+        <li>Random feature subsets: sqrt(d) features at each split → further decorrelation</li>
+        <li>Averaging: reduces variance without increasing bias</li>
+        <li>OOB error: ~37% of samples left out per tree → free validation set</li>
+      </ul>
+      <h3>Gradient Boosting (XGBoost, LightGBM, CatBoost)</h3>
+      <div class="formula">
+F_m(x) = F_{m-1}(x) + η · h_m(x)
+h_m fits residuals: rᵢ = -∂L/∂F(xᵢ)|_{F=F_{m-1}}
+
+XGBoost objective: L(θ) = Σl(yᵢ, ŷᵢ) + Σ(γTₖ + ½λ||wₖ||²)
+      </div>
+      <table>
+        <tr><th>Method</th><th>Parallelism</th><th>Speed</th><th>Key advantage</th></tr>
+        <tr><td>XGBoost</td><td>Column-wise</td><td>Fast</td><td>Regularized, exact splits</td></tr>
+        <tr><td>LightGBM</td><td>GOSS + EFB</td><td>Fastest</td><td>Leaf-wise growth, huge datasets</td></tr>
+        <tr><td>CatBoost</td><td>Symmetric</td><td>Fast</td><td>Categorical features, ordered boosting</td></tr>
+      </table>
+      <pre><code>import xgboost as xgb
+model = xgb.XGBClassifier(
+    n_estimators=500, max_depth=6, learning_rate=0.05,
+    subsample=0.8, colsample_bytree=0.8,
+    reg_alpha=0.1, reg_lambda=1.0,
+    eval_metric='auc', early_stopping_rounds=50
+)
+model.fit(X_tr, y_tr, eval_set=[(X_val, y_val)], verbose=50)</code></pre>
+    </div>
+  </div>
+
+  <!-- Clustering -->
+  <div class="card" id="card-cluster">
+    <div class="card-header" onclick="toggleCard('card-cluster')">
+      <div class="card-title">Clustering — K-Means, DBSCAN, GMM</div>
+      <div class="card-tag tag-algo">Algorithm</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>K-Means</h3>
+      <p>Minimizes within-cluster sum of squares (WCSS = Σᵢ Σₓ∈Cᵢ ||x - μᵢ||²). E-step: assign points to nearest centroid. M-step: update centroids. Converges to local optimum — run multiple times with k-means++.</p>
+      <div class="formula">
+K-Means++: Choose centroids with probability ∝ D(x)²
+→ Better initialization, faster convergence, better solutions
+      </div>
+      <h3>DBSCAN</h3>
+      <p>Density-based. Parameters: ε (neighborhood radius), MinPts (min neighbors). <strong>Core point:</strong> ≥MinPts in ε-ball. <strong>Border point:</strong> in ε-ball of core. <strong>Noise:</strong> neither.</p>
+      <div class="success-box">✓ Finds arbitrary-shaped clusters, handles outliers (noise), no need to specify k. Fails in varying densities (use HDBSCAN).</div>
+      <h3>Gaussian Mixture Models (GMM)</h3>
+      <div class="formula">
+p(x) = Σₖ πₖ · N(x; μₖ, Σₖ)    where Σπₖ = 1
+
+EM algorithm:
+E-step: rᵢₖ = πₖN(xᵢ|μₖ,Σₖ) / Σⱼ πⱼN(xᵢ|μⱼ,Σⱼ)
+M-step: μₖ = ΣᵢrᵢₖΧᵢ / Σᵢrᵢₖ
+      </div>
+      <h3>Clustering evaluation (no labels)</h3>
+      <ul>
+        <li><strong>Silhouette score:</strong> (b-a)/max(a,b) — higher is better. Range [-1,1]</li>
+        <li><strong>Davies-Bouldin:</strong> Lower is better. Ratio of within-to-between cluster distances</li>
+        <li><strong>Calinski-Harabasz:</strong> Higher is better. Variance ratio criterion</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PCA -->
+  <div class="card" id="card-pca">
+    <div class="card-header" onclick="toggleCard('card-pca')">
+      <div class="card-title">Dimensionality Reduction — PCA, t-SNE, UMAP</div>
+      <div class="card-tag tag-math">Math</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>PCA — Principal Component Analysis</h3>
+      <div class="formula">
+1. Center data: X̃ = X - μ
+2. Covariance: Σ = X̃ᵀX̃ / (n-1)
+3. Eigendecomposition: Σ = VΛVᵀ
+4. Project: Z = X̃V_k  (keep top-k eigenvectors)
+
+Equivalently via SVD: X = UΣVᵀ  → principal components = columns of V
+      </div>
+      <ul>
+        <li>PCA finds directions of maximum variance</li>
+        <li>Components are orthogonal (uncorrelated)</li>
+        <li>Choose k by explained variance ratio (e.g., 95%)</li>
+        <li>Standardize before PCA when features have different scales</li>
+      </ul>
+      <h3>t-SNE vs UMAP (visualization)</h3>
+      <table>
+        <tr><th></th><th>t-SNE</th><th>UMAP</th></tr>
+        <tr><td>Speed</td><td>Slow O(n²)</td><td>Fast O(n log n)</td></tr>
+        <tr><td>Preserves</td><td>Local structure</td><td>Local + global</td></tr>
+        <tr><td>Deterministic</td><td>No</td><td>Yes (with seed)</td></tr>
+        <tr><td>Use for</td><td>Small datasets, viz</td><td>Large datasets, viz + downstream</td></tr>
+      </table>
+      <div class="warn-box">⚠️ Neither t-SNE nor UMAP preserve distances — cluster sizes and inter-cluster distances are NOT meaningful. Only topology/neighborhood matters.</div>
+    </div>
+  </div>
+
+  <!-- Recommender Systems -->
+  <div class="card" id="card-rec">
+    <div class="card-header" onclick="toggleCard('card-rec')">
+      <div class="card-title">Recommendation Systems <span class="badge badge-hot">HOT</span></div>
+      <div class="card-tag tag-algo">Algorithm</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>Collaborative Filtering</h3>
+      <p>User-based: find similar users, recommend what they liked. Item-based: find similar items to what user liked.</p>
+      <div class="formula">
+Matrix Factorization: R ≈ PQᵀ  (P: user embeddings, Q: item embeddings)
+Loss: min Σ(rᵢⱼ - pᵢᵀqⱼ)² + λ(||P||² + ||Q||²)
+SGD update: pᵢ ← pᵢ + η(eᵢⱼqⱼ - λpᵢ)  where eᵢⱼ = rᵢⱼ - pᵢᵀqⱼ
+      </div>
+      <h3>Two-tower architecture (Amazon/Google)</h3>
+      <ul>
+        <li>User tower: encodes user features, history → user embedding</li>
+        <li>Item tower: encodes item features → item embedding</li>
+        <li>Score: cosine similarity or dot product</li>
+        <li>Train with in-batch negatives or sampled negatives</li>
+        <li>Serve: ANN search (FAISS, ScaNN) for fast retrieval</li>
+      </ul>
+      <h3>Cold start problem solutions</h3>
+      <ul>
+        <li>Content-based: use item/user features when no interactions exist</li>
+        <li>Popularity-based: recommend trending items to new users</li>
+        <li>Hybrid: blend collaborative + content-based</li>
+        <li>Exploration: epsilon-greedy, UCB, or Thompson sampling (bandit approach)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Naive Bayes & KNN -->
+  <div class="card" id="card-nb">
+    <div class="card-header" onclick="toggleCard('card-nb')">
+      <div class="card-title">Naive Bayes, KNN, and Bayesian Classifiers</div>
+      <div class="card-tag tag-algo">Algorithm</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>Naive Bayes</h3>
+      <div class="formula">
+P(y|x) ∝ P(y) · Π P(xᵢ|y)   (conditional independence assumption)
+
+Gaussian NB: P(xᵢ|y) = N(xᵢ; μᵢᵧ, σᵢᵧ²)
+Multinomial NB: P(xᵢ|y) = (count + α) / (total + α·|V|)  [Laplace smoothing]
+      </div>
+      <h3>K-Nearest Neighbors</h3>
+      <p>Non-parametric. Store all training data. Predict by majority vote (classification) or mean (regression) of k nearest neighbors.</p>
+      <ul>
+        <li>k=1: very high variance. k=n: very high bias (predict mode)</li>
+        <li>Use cross-validation to find optimal k</li>
+        <li>Distance metrics: Euclidean, Manhattan, Cosine, Hamming (binary)</li>
+        <li>Scale features first! Distance is sensitive to scale.</li>
+        <li>O(nd) prediction — use KD-tree or Ball-tree for speedup</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DEEP LEARNING -->
+<div id="section-dl" class="section">
+  <h1>Deep Learning</h1>
+  <p>Neural networks, transformers, LLMs, CNNs, and modern architectures.</p>
+
+  <!-- Backpropagation -->
+  <div class="card" id="card-bp">
+    <div class="card-header" onclick="toggleCard('card-bp')">
+      <div class="card-title">Backpropagation & Automatic Differentiation <span class="badge badge-hot">HOT</span></div>
+      <div class="card-tag tag-math">Math</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p>Backprop is just the chain rule applied to a computational graph, computing gradients from output to input.</p>
+      <div class="formula">
+Forward:  z = Wx + b;  a = σ(z)
+Backward: ∂L/∂W = ∂L/∂a · ∂a/∂z · ∂z/∂W
+        = δ · xᵀ    where δ = ∂L/∂z = ∂L/∂a · σ'(z)
+
+Chain rule: ∂L/∂xₗ = Wₗ₊₁ᵀ · δₗ₊₁    (propagate error backward)
+      </div>
+      <h3>Vanishing & exploding gradients</h3>
+      <ul>
+        <li><strong>Vanishing:</strong> Gradients → 0 as layers increase (sigmoid/tanh saturate). Fix: ReLU, residual connections, batch norm, LSTM gates</li>
+        <li><strong>Exploding:</strong> Gradients grow exponentially. Fix: gradient clipping (by norm or value)</li>
+      </ul>
+      <div class="formula">
+Gradient clipping: if ||g|| > threshold: g ← g · threshold/||g||
+      </div>
+    </div>
+  </div>
+
+  <!-- Activation Functions -->
+  <div class="card" id="card-act">
+    <div class="card-header" onclick="toggleCard('card-act')">
+      <div class="card-title">Activation Functions</div>
+      <div class="card-tag tag-concept">Concept</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tr><th>Function</th><th>Formula</th><th>Range</th><th>Issue</th></tr>
+        <tr><td>Sigmoid</td><td>1/(1+e⁻ˣ)</td><td>(0,1)</td><td>Vanishing grad, not zero-centered</td></tr>
+        <tr><td>Tanh</td><td>(eˣ-e⁻ˣ)/(eˣ+e⁻ˣ)</td><td>(-1,1)</td><td>Vanishing grad (less severe)</td></tr>
+        <tr><td>ReLU</td><td>max(0,x)</td><td>[0,∞)</td><td>Dying ReLU (x&lt;0 → dead neuron)</td></tr>
+        <tr><td>Leaky ReLU</td><td>max(αx,x) α=0.01</td><td>(-∞,∞)</td><td>α is hyperparameter</td></tr>
+        <tr><td>GELU</td><td>x·Φ(x)</td><td>(-∞,∞)</td><td>Expensive; used in BERT/GPT</td></tr>
+        <tr><td>SiLU/Swish</td><td>x·σ(x)</td><td>(-∞,∞)</td><td>Smooth, non-monotone</td></tr>
+      </table>
+      <div class="info-box">💡 GELU and SiLU outperform ReLU in transformers. ReLU is still standard for CNNs and MLPs.</div>
+    </div>
+  </div>
+
+  <!-- Transformers -->
+  <div class="card" id="card-transformer">
+    <div class="card-header" onclick="toggleCard('card-transformer')">
+      <div class="card-title">Transformers & Self-Attention <span class="badge badge-hot">HOT</span></div>
+      <div class="card-tag tag-algo">Architecture</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>Scaled dot-product attention</h3>
+      <div class="formula">
+Attention(Q, K, V) = softmax(QKᵀ / √dₖ) · V
+
+Q = XWQ,  K = XWK,  V = XWV   (linear projections)
+√dₖ scaling: prevents softmax from entering saturation region
+
+Multi-Head: head_i = Attention(QWᵢQ, KWᵢK, VWᵢV)
+MHA = Concat(head₁,...,headₕ) · WO
+      </div>
+      <h3>Why attention works</h3>
+      <ul>
+        <li>Every token attends to every other token → captures long-range dependencies</li>
+        <li>Attention weights are input-dependent (unlike convolution)</li>
+        <li>Parallelizable over sequence (unlike RNNs)</li>
+        <li>O(n²d) complexity — bottleneck for long sequences</li>
+      </ul>
+      <h3>Positional encoding</h3>
+      <div class="formula">
+PE(pos, 2i)   = sin(pos / 10000^(2i/d_model))
+PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
+
+Learned PE (BERT), RoPE (LLaMA), ALiBi, NoPE (various LLMs)
+      </div>
+      <h3>Efficient attention variants</h3>
+      <ul>
+        <li><strong>FlashAttention:</strong> IO-aware, fused CUDA kernel, O(n) memory (vs O(n²))</li>
+        <li><strong>Sparse attention:</strong> Local + global tokens (Longformer, BigBird)</li>
+        <li><strong>Linear attention:</strong> O(n) — kernel approximation of softmax</li>
+        <li><strong>GQA (Grouped Query Attention):</strong> Multiple query heads share key/value heads — used in LLaMA-3, Gemini</li>
+      </ul>
+      <h3>Layer Normalization</h3>
+      <div class="formula">
+LayerNorm(x) = γ · (x - μ) / (σ + ε) + β    (per-token, across features)
+Pre-LN (norm before attention) vs Post-LN (norm after) — Pre-LN more stable training
+      </div>
+    </div>
+  </div>
+
+  <!-- LLMs -->
+  <div class="card" id="card-llm">
+    <div class="card-header" onclick="toggleCard('card-llm')">
+      <div class="card-title">Large Language Models — Training & Fine-tuning <span class="badge badge-hot">HOT</span></div>
+      <div class="card-tag tag-algo">Architecture</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>Pre-training objectives</h3>
+      <ul>
+        <li><strong>Causal LM (GPT):</strong> Predict next token. Loss = CE(p(xₜ|x₁..xₜ₋₁), xₜ)</li>
+        <li><strong>Masked LM (BERT):</strong> Predict masked tokens. 15% masked: 80% [MASK], 10% random, 10% unchanged</li>
+        <li><strong>Seq2Seq (T5):</strong> Encoder-decoder, span corruption denoising</li>
+      </ul>
+      <h3>RLHF — Reinforcement Learning from Human Feedback</h3>
+      <div class="formula">
+1. SFT: finetune on demonstrations
+2. Reward model: r(x,y) ← human preference pairs (Bradley-Terry model)
+3. PPO: max_{π} E[r(x,y)] - β·KL(π||π_SFT)    (KL prevents reward hacking)
+      </div>
+      <h3>Parameter-efficient fine-tuning</h3>
+      <table>
+        <tr><th>Method</th><th>Trainable params</th><th>Idea</th></tr>
+        <tr><td>LoRA</td><td>0.1-1%</td><td>W = W₀ + AB where A∈ℝ^{d×r}, B∈ℝ^{r×k}, r≪min(d,k)</td></tr>
+        <tr><td>QLoRA</td><td>0.1-1%</td><td>LoRA + 4-bit NF4 quantization of base model</td></tr>
+        <tr><td>Prefix tuning</td><td>&lt;0.1%</td><td>Prepend learnable tokens to each layer</td></tr>
+        <tr><td>Adapter</td><td>~3%</td><td>Small FF modules inserted in each layer</td></tr>
+        <tr><td>Full FT</td><td>100%</td><td>All weights. Highest quality, most expensive</td></tr>
+      </table>
+      <h3>Inference optimization</h3>
+      <ul>
+        <li><strong>KV Cache:</strong> Cache K,V tensors for past tokens during generation</li>
+        <li><strong>Speculative decoding:</strong> Draft model generates tokens, target model verifies in parallel</li>
+        <li><strong>Quantization:</strong> INT8, INT4 (GPTQ, AWQ) — 2-4x speedup with minimal quality loss</li>
+        <li><strong>Continuous batching:</strong> vLLM's PagedAttention — near-zero KV cache waste</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CNNs -->
+  <div class="card" id="card-cnn">
+    <div class="card-header" onclick="toggleCard('card-cnn')">
+      <div class="card-title">CNNs & Computer Vision Architectures</div>
+      <div class="card-tag tag-algo">Architecture</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="formula">
+Output size = ⌊(W - F + 2P) / S⌋ + 1
+W=input size, F=filter, P=padding, S=stride
+
+Params per conv layer = F·F·Cᵢₙ·Cₒᵤₜ + Cₒᵤₜ (bias)
+      </div>
+      <h3>Key architectures timeline</h3>
+      <div class="timeline">
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-title">LeNet (1998)</div><div class="timeline-body">First successful CNN for digit recognition</div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-title">AlexNet (2012)</div><div class="timeline-body">ReLU, dropout, GPU training. Won ImageNet by large margin</div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-title">VGG (2014)</div><div class="timeline-body">Deep 3×3 convolutions. Simple but effective</div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-title">ResNet (2015)</div><div class="timeline-body">Residual skip connections. Train 1000+ layers. He initialization</div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-title">EfficientNet (2019)</div><div class="timeline-body">Neural architecture search + compound scaling</div></div>
+        <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-title">ViT (2020)</div><div class="timeline-body">Vision Transformer. Patch embeddings + self-attention replaces conv</div></div>
+      </div>
+      <h3>ResNet skip connections</h3>
+      <div class="formula">
+H(x) = F(x) + x    (identity shortcut)
+∂L/∂x = ∂L/∂H · (∂F/∂x + 1)    → gradient always has +1 term → no vanishing!
+      </div>
+    </div>
+  </div>
+
+  <!-- Batch Norm & Regularization -->
+  <div class="card" id="card-bn">
+    <div class="card-header" onclick="toggleCard('card-bn')">
+      <div class="card-title">Normalization, Dropout & Regularization in DL</div>
+      <div class="card-tag tag-concept">Concept</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="formula">
+Batch Norm: μ_B = mean(xᵢ), σ²_B = var(xᵢ)
+            x̂ᵢ = (xᵢ - μ_B) / √(σ²_B + ε)
+            yᵢ = γx̂ᵢ + β    (learnable scale/shift)
+
+Layer Norm: normalize across features (not batch) → used in Transformers
+Group Norm: normalize within channel groups → CNNs with small batch size
+      </div>
+      <h3>Why Batch Norm works</h3>
+      <ul>
+        <li>Reduces internal covariate shift (controversial — Santurkar et al. 2018 disputes this)</li>
+        <li>Empirically: smooths the loss landscape, allows higher learning rates</li>
+        <li>Acts as regularizer (slight noise from mini-batch statistics)</li>
+        <li>Use layer norm in transformers (batch size varies; sequence positions independent)</li>
+      </ul>
+      <h3>Dropout</h3>
+      <div class="formula">
+Training: mask = Bernoulli(p); x̃ = x * mask / (1-p)   [inverted dropout]
+Test:     use all neurons (no scaling needed with inverted dropout)
+      </div>
+      <ul>
+        <li>p=0.1-0.3 for transformers, p=0.5 for dense layers</li>
+        <li>DropPath / Stochastic depth: drop entire residual blocks</li>
+        <li>Not used after conv layers much — BatchNorm subsumes regularization effect</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Generative Models -->
+  <div class="card" id="card-gen">
+    <div class="card-header" onclick="toggleCard('card-gen')">
+      <div class="card-title">Generative Models — VAE, GAN, Diffusion <span class="badge badge-new">NEW</span></div>
+      <div class="card-tag tag-algo">Architecture</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>VAE — Variational Autoencoder</h3>
+      <div class="formula">
+ELBO = E_q[log p(x|z)] - KL(q(z|x) || p(z))
+     = reconstruction loss + KL regularization
+
+Reparameterization: z = μ + ε·σ, ε~N(0,I)  → allows backprop through sampling
+      </div>
+      <h3>GAN — Generative Adversarial Network</h3>
+      <div class="formula">
+min_G max_D E_x[log D(x)] + E_z[log(1 - D(G(z)))]
+
+Issues: Mode collapse, training instability, vanishing gradients
+Fixes: WGAN (Wasserstein distance), spectral norm, gradient penalty
+      </div>
+      <h3>Diffusion Models (DDPM, DDIM)</h3>
+      <div class="formula">
+Forward: q(xₜ|xₜ₋₁) = N(xₜ; √(1-β)xₜ₋₁, βI)     [add noise]
+Reverse: p_θ(xₜ₋₁|xₜ) = N(xₜ₋₁; μ_θ(xₜ,t), Σ_θ)  [denoise]
+
+Loss: L = E[||ε - ε_θ(xₜ, t)||²]   [predict added noise]
+      </div>
+      <div class="info-box">💡 Diffusion models outperform GANs on image quality and diversity. DDIM allows ~10x faster sampling with deterministic inversion.</div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS & PROB -->
+<div id="section-stats" class="section">
+  <h1>Statistics & Probability</h1>
+  <p>Essential foundations for any ML scientist role — often tested directly.</p>
+
+  <div class="card" id="card-prob">
+    <div class="card-header" onclick="toggleCard('card-prob')">
+      <div class="card-title">Probability Theory Essentials <span class="badge badge-hot">HOT</span></div>
+      <div class="card-tag tag-math">Math</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="formula">
+Bayes' Theorem: P(A|B) = P(B|A)·P(A) / P(B)
+
+Law of total probability: P(B) = Σᵢ P(B|Aᵢ)P(Aᵢ)
+Conditional independence: P(X,Y|Z) = P(X|Z)·P(Y|Z)
+
+E[X] = Σx·P(x)        Var[X] = E[X²] - (E[X])²
+Cov[X,Y] = E[XY] - E[X]E[Y]
+      </div>
+      <h3>Key distributions to know</h3>
+      <table>
+        <tr><th>Distribution</th><th>PMF/PDF</th><th>Mean</th><th>Var</th><th>Use</th></tr>
+        <tr><td>Bernoulli(p)</td><td>pˣ(1-p)^(1-x)</td><td>p</td><td>p(1-p)</td><td>Binary outcome</td></tr>
+        <tr><td>Binomial(n,p)</td><td>C(n,x)pˣ(1-p)^(n-x)</td><td>np</td><td>np(1-p)</td><td>Success counts</td></tr>
+        <tr><td>Poisson(λ)</td><td>e^-λ·λˣ/x!</td><td>λ</td><td>λ</td><td>Rare events, counts</td></tr>
+        <tr><td>Normal(μ,σ²)</td><td>(2πσ²)^-½·exp(-½((x-μ)/σ)²)</td><td>μ</td><td>σ²</td><td>Universal</td></tr>
+        <tr><td>Exponential(λ)</td><td>λe^-λx</td><td>1/λ</td><td>1/λ²</td><td>Time between events</td></tr>
+        <tr><td>Beta(α,β)</td><td>x^(α-1)(1-x)^(β-1)/B(α,β)</td><td>α/(α+β)</td><td>—</td><td>Prior for prob</td></tr>
+      </table>
+      <h3>CLT & LLN</h3>
+      <ul>
+        <li><strong>CLT:</strong> Sum of n iid random variables → Normal as n→∞. Foundation of hypothesis testing.</li>
+        <li><strong>LLN:</strong> Sample mean → population mean as n→∞. Why more data helps.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" id="card-hyp">
+    <div class="card-header" onclick="toggleCard('card-hyp')">
+      <div class="card-title">Hypothesis Testing & A/B Testing <span class="badge badge-hot">HOT</span></div>
+      <div class="card-tag tag-concept">Concept</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>Framework</h3>
+      <ul>
+        <li><strong>H₀ (null):</strong> No effect exists</li>
+        <li><strong>H₁ (alternative):</strong> Effect exists</li>
+        <li><strong>p-value:</strong> P(data as extreme | H₀ true) — NOT P(H₀ true|data)!</li>
+        <li><strong>α (significance level):</strong> Acceptable false positive rate (typ. 0.05)</li>
+        <li><strong>Power (1-β):</strong> P(reject H₀ | H₁ true). Typ. 0.80</li>
+      </ul>
+      <div class="formula">
+Type I error (α):  FP — reject H₀ when H₀ true
+Type II error (β): FN — fail to reject H₀ when H₁ true
+
+Effect size (Cohen's d) = (μ₁ - μ₂) / σ_pooled
+Sample size: n ≈ 2σ²(z_α/2 + z_β)² / δ²
+      </div>
+      <h3>A/B testing at scale (Amazon/Microsoft style)</h3>
+      <ul>
+        <li><strong>Randomization unit:</strong> User-level (not page-level) — network effects, SUTVA</li>
+        <li><strong>Novelty effect:</strong> New features get artificial boost. Run until novelty wears off.</li>
+        <li><strong>Multiple testing:</strong> Bonferroni or BH correction when testing many metrics</li>
+        <li><strong>Metric choice:</strong> North star + guardrail metrics. Don't optimize proxy too hard.</li>
+        <li><strong>CUPED:</strong> Controlled experiment using pre-experiment data to reduce variance by 50-80%</li>
+        <li><strong>Switchback tests:</strong> For marketplace/two-sided platforms where user-level randomization breaks</li>
+      </ul>
+      <pre><code>from scipy import stats
+# Two-sample t-test
+t_stat, p_val = stats.ttest_ind(control, treatment)
+# With CUPED variance reduction
+y_cuped = y - theta * (x_pre - x_pre.mean())
+theta = np.cov(y, x_pre)[0,1] / np.var(x_pre)</code></pre>
+    </div>
+  </div>
+
+  <div class="card" id="card-bayes">
+    <div class="card-header" onclick="toggleCard('card-bayes')">
+      <div class="card-title">Bayesian Statistics & Inference</div>
+      <div class="card-tag tag-math">Math</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="formula">
+Posterior ∝ Likelihood × Prior
+P(θ|X) ∝ P(X|θ) · P(θ)
+
+Bayesian vs Frequentist:
+- Frequentist: θ is fixed, data is random. CI: "95% of such intervals contain θ"
+- Bayesian: θ is random, data is fixed. CrI: "P(θ ∈ [a,b] | data) = 0.95"
+      </div>
+      <h3>Conjugate priors (closed-form posteriors)</h3>
+      <table>
+        <tr><th>Likelihood</th><th>Prior</th><th>Posterior</th></tr>
+        <tr><td>Binomial</td><td>Beta(α,β)</td><td>Beta(α+k, β+n-k)</td></tr>
+        <tr><td>Poisson</td><td>Gamma(α,β)</td><td>Gamma(α+Σx, β+n)</td></tr>
+        <tr><td>Gaussian (known σ)</td><td>Gaussian</td><td>Gaussian</td></tr>
+      </table>
+      <h3>MLE vs MAP</h3>
+      <div class="formula">
+MLE: θ* = argmax P(X|θ)                    (no prior)
+MAP: θ* = argmax P(X|θ)·P(θ) = MLE + prior regularization
+L2 prior ↔ L2 regularization (Ridge)
+L1 prior ↔ L1 regularization (Lasso)
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="card-causal">
+    <div class="card-header" onclick="toggleCard('card-causal')">
+      <div class="card-title">Causal Inference <span class="badge badge-hot">HOT</span></div>
+      <div class="card-tag tag-concept">Concept</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <p>Correlation ≠ Causation. Causal inference asks: what is the effect of treatment T on outcome Y?</p>
+      <h3>Potential outcomes framework (Rubin)</h3>
+      <div class="formula">
+ATE = E[Y(1) - Y(0)]   (average treatment effect)
+ATT = E[Y(1) - Y(0) | T=1]   (effect on treated)
+Fundamental problem: cannot observe both Y(1) and Y(0) for same unit
+      </div>
+      <h3>Methods</h3>
+      <ul>
+        <li><strong>RCT / A-B test:</strong> Gold standard. Random assignment ensures ignorability.</li>
+        <li><strong>Propensity score matching:</strong> Match treated/control units with similar P(T=1|X)</li>
+        <li><strong>Diff-in-diff (DiD):</strong> Compare changes over time: (treated-after) - (treated-before) - (control-after) + (control-before)</li>
+        <li><strong>Instrumental variables (IV):</strong> Use instrument Z that affects T but not Y directly</li>
+        <li><strong>Regression discontinuity (RD):</strong> Treatment assigned by threshold. Compare just above/below cutoff.</li>
+        <li><strong>Synthetic control:</strong> Construct counterfactual from weighted combination of control units</li>
+      </ul>
+      <div class="warn-box">⚠️ Confounders, selection bias, and SUTVA violations are the main pitfalls. Always ask: why is someone in treatment vs control?</div>
+    </div>
+  </div>
+</div>
+
+<!-- CODING & SYSTEMS -->
+<div id="section-coding" class="section">
+  <h1>Coding, MLOps & System Design</h1>
+  <p>Python, SQL, ML system design — critical for Applied Scientist roles.</p>
+
+  <div class="card" id="card-pandas">
+    <div class="card-header" onclick="toggleCard('card-pandas')">
+      <div class="card-title">Python & Pandas — Key Patterns</div>
+      <div class="card-tag tag-concept">Coding</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <pre><code># Essential numpy operations
+import numpy as np
+a = np.array([[1,2],[3,4]])
+np.dot(a, a.T)          # matrix multiply
+np.linalg.eig(a)        # eigendecomposition
+np.linalg.svd(a)        # SVD
+np.einsum('ij,jk->ik', a, a)  # efficient einsum
+
+# Pandas essentials
+import pandas as pd
+df.groupby('user_id').agg({'revenue': 'sum', 'clicks': 'count'})
+df.merge(df2, on='id', how='left')
+df.pivot_table(values='sales', index='region', columns='product', aggfunc='mean')
+pd.cut(df['age'], bins=[0,18,35,65,100], labels=['teen','young','mid','senior'])
+
+# Efficient apply with vectorization
+df['new_col'] = np.where(df['x'] > 0, df['a'], df['b'])  # fast
+# Avoid: df.apply(lambda row: ..., axis=1)  # slow</code></pre>
+    </div>
+  </div>
+
+  <div class="card" id="card-sql">
+    <div class="card-header" onclick="toggleCard('card-sql')">
+      <div class="card-title">SQL for Data Science <span class="badge badge-hot">HOT</span></div>
+      <div class="card-tag tag-concept">Coding</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <pre><code>-- Window functions (very common in interviews)
+SELECT user_id, event_date, revenue,
+  ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY event_date) as rn,
+  SUM(revenue) OVER (PARTITION BY user_id ORDER BY event_date 
+                     ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as cum_rev,
+  LAG(revenue, 1) OVER (PARTITION BY user_id ORDER BY event_date) as prev_rev,
+  AVG(revenue) OVER (PARTITION BY user_id 
+                     ORDER BY event_date ROWS 6 PRECEDING) as rolling_7d_avg
+FROM events;
+
+-- Cohort analysis (retention)
+WITH first_order AS (
+  SELECT user_id, MIN(order_date) as cohort_date FROM orders GROUP BY user_id
+),
+cohort AS (
+  SELECT f.user_id, 
+         DATEDIFF(month, f.cohort_date, o.order_date) as months_since
+  FROM first_order f JOIN orders o USING(user_id)
+)
+SELECT cohort_date, months_since, COUNT(DISTINCT user_id) as retained
+FROM cohort GROUP BY 1, 2;
+
+-- Self join for session gap detection
+SELECT a.user_id, a.ts, b.ts as next_ts,
+       DATEDIFF(minute, a.ts, b.ts) as gap
+FROM events a
+LEFT JOIN events b ON a.user_id = b.user_id 
+  AND b.ts = (SELECT MIN(ts) FROM events 
+              WHERE user_id = a.user_id AND ts > a.ts);</code></pre>
+    </div>
+  </div>
+
+  <div class="card" id="card-mlsys">
+    <div class="card-header" onclick="toggleCard('card-mlsys')">
+      <div class="card-title">ML System Design — Framework <span class="badge badge-hot">HOT</span></div>
+      <div class="card-tag tag-concept">System</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>ML design framework (use this structure)</h3>
+      <div class="roadmap-step"><div class="step-num">1</div><div><div class="timeline-title">Problem formulation</div><div class="timeline-body">What is the ML task? Classification/ranking/generation? What is the prediction target? Business metric → ML metric mapping.</div></div></div>
+      <div class="roadmap-step"><div class="step-num">2</div><div><div class="timeline-title">Data</div><div class="timeline-body">Sources, collection, labeling, volume, freshness, train/val/test split strategy. Handle data leakage.</div></div></div>
+      <div class="roadmap-step"><div class="step-num">3</div><div><div class="timeline-title">Feature engineering</div><div class="timeline-body">User features, item features, context features, interaction features. Online vs offline features.</div></div></div>
+      <div class="roadmap-step"><div class="step-num">4</div><div><div class="timeline-title">Model selection & training</div><div class="timeline-body">Start simple (logistic regression baseline). Complexity-performance tradeoff. Training at scale.</div></div></div>
+      <div class="roadmap-step"><div class="step-num">5</div><div><div class="timeline-title">Evaluation</div><div class="timeline-body">Offline metrics, online A/B test, guardrail metrics. Slice-based evaluation (fairness).</div></div></div>
+      <div class="roadmap-step"><div class="step-num">6</div><div><div class="timeline-title">Serving & monitoring</div><div class="timeline-body">Latency requirements, batch vs real-time, feature store, model drift detection, retraining pipeline.</div></div></div>
+      <h3>Common interview problems</h3>
+      <ul>
+        <li>Design YouTube/Netflix recommendation system</li>
+        <li>Design spam detection for email</li>
+        <li>Design ads click-through rate prediction</li>
+        <li>Design harmful content detection at scale</li>
+        <li>Design search ranking for Amazon</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" id="card-mlops">
+    <div class="card-header" onclick="toggleCard('card-mlops')">
+      <div class="card-title">MLOps — Production ML</div>
+      <div class="card-tag tag-concept">System</div>
+      <span class="card-chevron">▶</span>
+    </div>
+    <div class="card-body">
+      <h3>Model deployment patterns</h3>
+      <ul>
+        <li><strong>Shadow deployment:</strong> New model runs alongside old, no serving traffic</li>
+        <li><strong>Canary deployment:</strong> Route 1-5% traffic to new model before full rollout</li>
+        <li><strong>Blue-green:</strong> Switch all traffic at once with instant rollback</li>
+        <li><strong>Multi-armed bandit:</strong> Dynamically allocate traffic based on performance</li>
+      </ul>
+      <h3>Data/model drift</h3>
+      <ul>
+        <li><strong>Data drift:</strong> P(X) changes — monitor feature distributions (KS test, PSI)</li>
+        <li><strong>Concept drift:</strong> P(Y|X) changes — monitor model performance metrics</li>
+        <li><strong>Label drift:</strong> P(Y) changes — monitor prediction distribution</li>
+      </ul>
+      <h3>Feature store</h3>
+      <p>Centralized repository for features. Offline store (batch, historical) + online store (low-latency, point-in-time). Prevents training-serving skew. Examples: Feast, Tecton, AWS SageMaker Feature Store.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TOP 100 Q&A -->
+<div id="section-questions" class="section">
+  <h1>Top 100 Interview Q&A</h1>
+  <p>The most frequently asked questions at Amazon and Microsoft Applied Scientist interviews, with detailed answers.</p>
+
+  <input class="search-box" type="text" id="qa-search" placeholder="Search questions..." oninput="filterQA()">
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="setFilter('all', this)">All 100</button>
+    <button class="filter-btn" onclick="setFilter('ml', this)">ML Theory</button>
+    <button class="filter-btn" onclick="setFilter('dl', this)">Deep Learning</button>
+    <button class="filter-btn" onclick="setFilter('stat', this)">Stats</button>
+    <button class="filter-btn" onclick="setFilter('sys', this)">System Design</button>
+    <button class="filter-btn" onclick="setFilter('coding', this)">Coding</button>
+  </div>
+
+  <div id="qa-list"></div>
+</div>
+
+<!-- ROADMAP -->
+<div id="section-roadmap" class="section">
+  <h1>8-Week Study Roadmap</h1>
+  <p>Structured preparation plan for Amazon & Microsoft Applied Scientist interviews.</p>
+
+  <div class="grid2">
+    <div>
+      <h2>Week 1-2: ML Foundations</h2>
+      <div class="roadmap-step"><div class="step-num">1</div><div><div class="timeline-title">Core ML theory</div><div class="timeline-body">Bias-variance, regularization, optimization, cross-validation, evaluation metrics. Study every formula.</div></div></div>
+      <div class="roadmap-step"><div class="step-num">2</div><div><div class="timeline-title">Algorithms deep dive</div><div class="timeline-body">Linear/logistic regression, SVM, trees, boosting. Implement from scratch in numpy.</div></div></div>
+      <div class="roadmap-step"><div class="step-num">3</div><div><div class="timeline-title">Unsupervised + dim reduction</div><div class="timeline-body">K-means, DBSCAN, GMM, PCA, t-SNE, UMAP. Math + when to use each.</div></div></div>
+
+      <h2>Week 3-4: Deep Learning</h2>
+      <div class="roadmap-step"><div class="step-num">4</div><div><div class="timeline-title">Foundations</div><div class="timeline-body">Backprop, activations, batch norm, dropout. Implement a small net in PyTorch.</div></div></div>
+      <div class="roadmap-step"><div class="step-num">5</div><div><div class="timeline-title">Transformers & LLMs</div><div class="timeline-body">Attention math, BERT/GPT/T5, RLHF, LoRA, inference optimization. Read original papers.</div></div></div>
+      <div class="roadmap-step"><div class="step-num">6</div><div><div class="timeline-title">Computer vision + generative</div><div class="timeline-body">CNNs, ResNet, ViT. VAE, GAN, diffusion models basics.</div></div></div>
+    </div>
+    <div>
+      <h2>Week 5-6: Stats & System Design</h2>
+      <div class="roadmap-step"><div class="step-num">7</div><div><div class="timeline-title">Statistics & probability</div><div class="timeline-body">Distributions, hypothesis testing, Bayesian methods, MLE/MAP. 2-3 stats problems daily.</div></div></div>
+      <div class="roadmap-step"><div class="step-num">8</div><div><div class="timeline-title">A/B testing & causal</div><div class="timeline-body">Experimental design, power analysis, CUPED, DiD, IV. Know Amazon/Microsoft's scale challenges.</div></div></div>
+      <div class="roadmap-step"><div class="step-num">9</div><div><div class="timeline-title">ML system design</div><div class="timeline-body">Practice 10+ full ML design problems. Use the 6-step framework. Focus on rec systems, ranking, NLP.</div></div></div>
+
+      <h2>Week 7-8: Coding & Mock Interviews</h2>
+      <div class="roadmap-step"><div class="step-num">10</div><div><div class="timeline-title">LeetCode grind</div><div class="timeline-body">50 medium problems. Focus on arrays, graphs, DP, sliding window. 2-3 problems daily.</div></div></div>
+      <div class="roadmap-step"><div class="step-num">11</div><div><div class="timeline-title">SQL practice</div><div class="timeline-body">Window functions, CTEs, complex joins. Solve 30 HackerRank SQL problems.</div></div></div>
+      <div class="roadmap-step"><div class="step-num">12</div><div><div class="timeline-title">Mock interviews</div><div class="timeline-body">Pramp, Interviewing.io, or find a partner. Do 8+ full mock interviews. Record and review.</div></div></div>
+    </div>
+  </div>
+
+  <h2>Additional topics to prepare</h2>
+  <div class="grid3">
+    <div class="card" style="margin:0">
+      <div class="card-title" style="margin-bottom:8px">NLP</div>
+      <ul style="margin:0">
+        <li>Tokenization (BPE, WordPiece)</li>
+        <li>Word2Vec, GloVe, FastText</li>
+        <li>Named Entity Recognition</li>
+        <li>Text classification, seq2seq</li>
+        <li>RAG, prompt engineering</li>
+      </ul>
+    </div>
+    <div class="card" style="margin:0">
+      <div class="card-title" style="margin-bottom:8px">Responsible AI</div>
+      <ul style="margin:0">
+        <li>Fairness metrics (demographic parity, equalized odds)</li>
+        <li>Model explainability (SHAP, LIME)</li>
+        <li>Data privacy (differential privacy, federated learning)</li>
+        <li>Bias in training data</li>
+      </ul>
+    </div>
+    <div class="card" style="margin:0">
+      <div class="card-title" style="margin-bottom:8px">Research skills</div>
+      <ul style="margin:0">
+        <li>Read 2-3 top papers/week (arXiv)</li>
+        <li>Attention is All You Need</li>
+        <li>BERT, GPT-3, InstructGPT</li>
+        <li>LoRA, QLoRA, RLHF papers</li>
+        <li>Be ready to present your own work</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Key resources</h2>
+  <table>
+    <tr><th>Resource</th><th>Best for</th></tr>
+    <tr><td>ESLII (Bishop) + PRML</td><td>ML theory depth</td></tr>
+    <tr><td>d2l.ai (Dive into Deep Learning)</td><td>DL with code</td></tr>
+    <tr><td>CS229 Stanford notes</td><td>ML math foundations</td></tr>
+    <tr><td>Designing ML Systems (Chip Huyen)</td><td>ML system design</td></tr>
+    <tr><td>Trustworthy Online Controlled Experiments</td><td>A/B testing at scale</td></tr>
+    <tr><td>LeetCode (Premium)</td><td>Coding rounds</td></tr>
+    <tr><td>ML System Design (educative.io)</td><td>Design round prep</td></tr>
+  </table>
+</div>
+
+</div>
+
+<script>
+const qaData = [
+  // ML Theory (1-30)
+  {id:1, cat:'ml', q:'What is the bias-variance tradeoff and how do you manage it?', a:'Prediction error = Bias² + Variance + Irreducible noise. Bias is systematic error from wrong assumptions. Variance is sensitivity to training data fluctuations. High bias (underfitting): add features, increase model complexity. High variance (overfitting): regularize (L1/L2), get more data, use dropout, prune features. Ensemble methods like bagging reduce variance; boosting reduces bias.'},
+  {id:2, cat:'ml', q:'Explain L1 vs L2 regularization. When would you use each?', a:'L2 (Ridge): adds λΣwᵢ² to loss. Shrinks all weights proportionally, never to exactly zero. Good when all features are relevant. L1 (Lasso): adds λΣ|wᵢ|. Can shrink weights exactly to zero, enabling feature selection. Good when many features are irrelevant. Elastic Net combines both. Geometrically, L1 ball has corners on axes — solutions tend to land on corners (sparsity).'},
+  {id:3, cat:'ml', q:'How do you handle class imbalance in a dataset?', a:'Data-level: SMOTE (synthetic oversampling), random over/undersampling, Tomek links. Algorithm-level: class_weight="balanced" in sklearn, threshold tuning, focal loss. Evaluation: use AUC-PR instead of AUC-ROC (more sensitive to imbalance), use F1 not accuracy. Always choose metric aligned with business cost (FP vs FN trade-off).'},
+  {id:4, cat:'ml', q:'Explain gradient descent variants: SGD, Mini-batch, Adam.', a:'Batch GD: uses all data, stable but slow. SGD: one sample at a time, noisy but fast, can escape local minima. Mini-batch: best of both (32-512 samples). Adam: adaptive learning rates (per parameter) + momentum. Maintains running estimates of 1st (m) and 2nd (v) moments of gradients. Update: w -= lr * m_hat / (sqrt(v_hat) + eps). AdamW decouples weight decay from gradient scaling — preferred for transformers.'},
+  {id:5, cat:'ml', q:'What is cross-validation and when would you use each type?', a:'K-fold: split data into k parts, train on k-1, test on 1, rotate. Average performance. Stratified k-fold: maintains class ratios per fold — use for imbalanced data. LOOCV: k=n, maximum data usage, computationally expensive, good for tiny datasets. Time series split: use only past data to validate, never shuffle. Nested CV: outer loop for evaluation, inner for hyperparameter tuning — prevents overfit to test set.'},
+  {id:6, cat:'ml', q:'Explain the EM algorithm and where it is used.', a:'Expectation-Maximization: for models with latent variables. E-step: compute expected values of latent variables given current parameters (soft assignments). M-step: maximize expected log-likelihood w.r.t. parameters. Convergence: monotonically increases likelihood, converges to local optimum. Applications: GMM fitting, HMM training, missing data imputation, factor analysis. Run multiple times with different initializations.'},
+  {id:7, cat:'ml', q:'How does Random Forest differ from Gradient Boosting? When to use each?', a:'Random Forest: parallel training, bagging + random feature selection, reduces variance, robust to noise. Boosting (XGBoost/LightGBM): sequential, each tree corrects residuals of previous, reduces bias, often higher accuracy. RF: faster training, more robust to outliers, good baseline. GB: usually higher accuracy, more hyperparameters, can overfit. For tabular data, try LightGBM first; it often wins.'},
+  {id:8, cat:'ml', q:'What is feature importance and how is it computed in tree models?', a:'In trees: impurity decrease (Gini/entropy) attributed to feature across all splits, weighted by samples. Mean Decrease Impurity (MDI) — fast but biased toward high-cardinality features. Permutation importance (MDA): randomly permute feature, measure performance drop — more reliable but slower. SHAP values: game-theoretic, additive, consistent, handles feature interactions. For linear models: |coefficient × feature std|.'},
+  {id:9, cat:'ml', q:'Explain PCA. What are its assumptions and limitations?', a:'PCA finds orthogonal directions of maximum variance via eigendecomposition of covariance matrix (or SVD). Steps: center data, compute covariance, take top-k eigenvectors. Assumptions: linear relationships between features, variance = information (not always true), features should be scaled. Limitations: loses interpretability, cannot capture non-linear structure (use kernel PCA or autoencoders), sensitive to outliers.'},
+  {id:10, cat:'ml', q:'How do you detect and handle data leakage?', a:'Leakage: information from the future or target leaks into features. Types: target leakage (feature created using target), temporal leakage (future data in training), train-test leakage (preprocessing on combined data). Detection: surprisingly high CV score, features correlated >0.9 with target. Prevention: always fit transformers on train set only, use time-aware splits, be careful with target encoding.'},
+  {id:11, cat:'ml', q:'What is the kernel trick in SVM and how does it work?', a:'Maps data to higher-dimensional space to make it linearly separable. Key insight: only need inner products φ(x)ᵀφ(z), not explicit φ. Kernel K(x,z) = φ(x)ᵀφ(z) computes this implicitly and efficiently. RBF kernel maps to infinite dimensions. Mercer\'s theorem: valid kernels must be positive semi-definite. Applications: SVMs with non-linear boundaries, Gaussian Processes, kernel PCA.'},
+  {id:12, cat:'ml', q:'Explain AUROC. What does it measure and when is it misleading?', a:'AUC-ROC = P(score_pos > score_neg) = area under the ROC curve (TPR vs FPR). Threshold-invariant ranking quality measure. Range [0.5, 1.0] (random = 0.5). Misleading with severe class imbalance: a model predicting all 0s can have high AUC-ROC when FPR denominator is huge. Use AUC-PR in this case — it focuses on positive class performance and is more sensitive to imbalance.'},
+  {id:13, cat:'ml', q:'What is the difference between bagging and boosting?', a:'Bagging (Bootstrap AGGregatING): parallel. Train multiple models on bootstrap samples, combine by voting/averaging. Reduces variance. Works best when individual models have high variance. Example: Random Forest. Boosting: sequential. Each model focuses on errors of previous. Reduces bias. Weights samples by difficulty. Risk of overfitting noise. Example: AdaBoost, XGBoost.'},
+  {id:14, cat:'ml', q:'Explain the curse of dimensionality and its implications for ML.', a:'As dimensions grow: volume grows exponentially, data becomes sparse. Distance metrics lose meaning (all points equidistant in high-d). Need exponentially more data to cover space. Implications: k-NN breaks down, density estimation fails, overfitting risk increases. Solutions: dimensionality reduction (PCA, autoencoders), feature selection, L1/L2 regularization, manifold hypothesis (real data lies on low-dim manifold).'},
+  {id:15, cat:'ml', q:'How would you approach a highly skewed regression target (e.g., house prices)?', a:'Log-transform target: y = log(price+1). Models learn to predict log-price, then exponentiate. Check residual plots (should be roughly normal). Handle outliers carefully — Huber loss or quantile regression more robust than MSE. Feature engineering: log-transform right-skewed features too. Evaluate with MAPE or RMSLE (on log scale) instead of RMSE.'},
+  {id:16, cat:'ml', q:'What is multi-task learning and when does it help?', a:'Train one model on multiple related tasks simultaneously. Shared representations benefit from auxiliary tasks. Helps when: tasks share underlying structure, one task has limited data but benefits from others, want regularization from task diversity. Examples: NLP models jointly trained on NER + POS + parsing; ad CTR prediction sharing user behavior signals across ad types. Risk: negative transfer when tasks conflict.'},
+  {id:17, cat:'ml', q:'Explain precision-recall tradeoff and how to choose a threshold.', a:'Lowering threshold: catches more positives (higher recall) but more FPs (lower precision). Raising threshold: fewer FPs (higher precision) but misses true positives (lower recall). Choose based on cost asymmetry: fraud detection → high recall (catch all fraud). Spam → high precision (don\'t block legit emails). Optimal threshold via F1 score, business cost matrix, or Youden\'s index (TPR - FPR).'},
+  {id:18, cat:'ml', q:'What is transfer learning? When does it fail?', a:'Use knowledge from pre-trained model (source domain/task) for new task (target domain). Approaches: fine-tune all weights, fine-tune last layers only, use as feature extractor, domain adaptation. Fails when: source and target distributions very different (domain shift), target task fundamentally different from source, source model too small for target complexity. Fine-tuning only last layers is safer when source and target are very different.'},
+  {id:19, cat:'ml', q:'How does XGBoost differ from standard gradient boosting?', a:'Standard GB: greedy split finding with depth-first approach. XGBoost: regularized objective (L1+L2 on leaf weights), second-order Taylor expansion for better gradient estimates, shrinkage (learning rate), column/row subsampling, built-in cross-validation, early stopping, handling missing values natively (learns best direction), parallel split finding by sorting features. These make XGBoost faster, more regularized, and usually more accurate.'},
+  {id:20, cat:'ml', q:'Explain the difference between generative and discriminative models.', a:'Discriminative: directly model P(Y|X). Learn decision boundary. Examples: logistic regression, SVM, CRF. Better classification performance with enough data. Generative: model P(X,Y) = P(X|Y)·P(Y). Learn data distribution. Examples: Naive Bayes, HMM, GMM, VAE. Can generate samples, handle missing features, work with less data (can incorporate prior). Bayes optimal classifier requires generative model.'},
+  {id:21, cat:'ml', q:'What is the VC dimension and what is its significance?', a:'Vapnik-Chervonenkis dimension: maximum number of points a hypothesis class can shatter (correctly classify all 2ⁿ labelings). Measures model capacity. VC dim of linear classifier in d dimensions = d+1. Significance: Generalization bound — with probability 1-δ, test error ≤ train error + O(√(VC_dim · log(n)/n + log(1/δ)/n)). Practical use: trade-off between model complexity (VC dim) and training error.'},
+  {id:22, cat:'ml', q:'How would you debug a model with poor generalization?', a:'1. Check for data leakage. 2. Learning curves: is gap between train/val large? (variance) or both high? (bias). 3. Error analysis: look at worst predictions — is there a pattern? Missing features? 4. Feature importance: are some features suspicious (proxy for target)? 5. Slice analysis: performance worse on subgroups? 6. Try simpler model — if performance doesn\'t drop much, complex model is overfitting. 7. More data (if variance problem).'},
+  {id:23, cat:'ml', q:'Explain SHAP values and how they work.', a:'SHAP (SHapley Additive exPlanations): assigns each feature a contribution to the prediction, satisfying game-theoretic axioms (efficiency, symmetry, dummy, additivity). φᵢ = average marginal contribution of feature i across all coalitions. TreeSHAP: polynomial-time exact computation for tree models. Consistent: if model changes so feature is more important, its SHAP value increases. Globally: SHAP summary plots show importance + direction across dataset.'},
+  {id:24, cat:'ml', q:'What is a ROC curve and how do you interpret it?', a:'ROC (Receiver Operating Characteristic): plots TPR (Recall) vs FPR (= 1-Specificity) as decision threshold varies. Points on curve from (1,1) upper-right (threshold=0, predict all positive) to (0,0) lower-left (threshold=1, predict all negative). Ideal: upper-left corner. AUC = area under curve. Random model: diagonal line (AUC=0.5). Used to compare classifiers independent of threshold choice.'},
+  {id:25, cat:'ml', q:'Explain the difference between parametric and non-parametric models.', a:'Parametric: fixed number of parameters regardless of data size. Example: linear regression (d+1 params), Gaussian distribution (mean+variance). Pros: fast inference, interpretable, work well with small data. Non-parametric: complexity grows with data. Example: k-NN, kernel SVM, Gaussian Processes. Pros: more flexible, fewer assumptions. Cons: slower inference, require more data, harder to interpret. Deep NNs are parametric but very high-dimensional.'},
+  {id:26, cat:'ml', q:'How do you handle multicollinearity in linear regression?', a:'Detection: correlation matrix, VIF > 10 indicates problem. Impact: inflates coefficient variances, makes interpretation unreliable (not prediction). Fixes: drop correlated features, PCA (orthogonal components), Ridge regression (L2 shrinkage handles collinearity well), domain-knowledge-guided feature selection. Note: multicollinearity doesn\'t affect predictions, only inference and coefficient interpretation. L2 regularization is the cleanest fix.'},
+  {id:27, cat:'ml', q:'What is the difference between hard and soft margin SVM?', a:'Hard margin SVM: requires all training points to be correctly classified (feasible only if linearly separable). Soft margin SVM: introduces slack variables ξᵢ ≥ 0 to allow misclassification. Minimize ½||w||² + C·Σξᵢ. C controls tradeoff: large C → small margin, low training error (overfit risk); small C → large margin, some misclassifications (underfit risk). Corresponds to L2-penalized hinge loss.'},
+  {id:28, cat:'ml', q:'Explain how to handle imbalanced time series data for anomaly detection.', a:'Unsupervised: Isolation Forest, DBSCAN, Autoencoder reconstruction error (no need for labels). Statistical: ARIMA residuals, control charts. Window-based: model normal behavior in sliding windows, flag deviations. Evaluation: F1 with adjusted labels (point within window of true anomaly = TP). Challenge: very few labeled anomalies. Semi-supervised: train on normal data only. Active learning: label most uncertain/diverse samples.'},
+  {id:29, cat:'ml', q:'What is label smoothing and why does it help?', a:'Instead of hard 0/1 labels, use softened targets: ỹ = (1-ε)·y + ε/K (K classes). Prevents model from being overconfident (overfit to training labels). Improves calibration (predicted probabilities more reliable). Regularization effect. Value: ε = 0.1 typical. Used in image classification (InceptionV4), machine translation. Relation: equivalent to adding KL divergence loss from uniform distribution to cross-entropy.'},
+  {id:30, cat:'ml', q:'How does LightGBM differ from XGBoost?', a:'LightGBM: leaf-wise tree growth (vs XGBoost\'s level-wise). Finds best leaf globally, can go deep on important branches. Two key optimizations: GOSS (Gradient-based One-Side Sampling) — keep large-gradient samples, random sample small-gradient ones. EFB (Exclusive Feature Bundling) — bundle mutually exclusive sparse features. Result: 10-100x faster than XGBoost, slightly better accuracy on large datasets. LightGBM can overfit on small datasets — use max_depth constraint.'},
+  // Deep Learning (31-55)
+  {id:31, cat:'dl', q:'Explain the transformer architecture in detail.', a:'Encoder (BERT) or decoder (GPT) or both (T5). Core: multi-head self-attention + position-wise FFN + residual connections + layer norm. Attention: Q, K, V projections. Score = softmax(QKᵀ/√dₖ)V. Multi-head: h parallel attention heads concatenated. FFN: two linear layers with GELU. Residual + LayerNorm after each sub-layer (pre-LN more stable). Positional encoding: sinusoidal or learned. Complexity: O(n²d) in sequence length.'},
+  {id:32, cat:'dl', q:'What is the vanishing gradient problem and how is it solved?', a:'In deep networks, gradients shrink exponentially during backprop when using saturating activations (sigmoid/tanh: derivatives < 0.25). Fix: (1) ReLU and variants — derivative is 1 for positive inputs. (2) Batch normalization — normalizes activations, keeps gradients well-scaled. (3) Residual connections (ResNet): ∂L/∂x contains +1 term from skip connection. (4) Proper initialization (He, Xavier). (5) LSTM/GRU gating for RNNs.'},
+  {id:33, cat:'dl', q:'Explain batch normalization. Why does it help and where is it used?', a:'BN normalizes each mini-batch: x̂ = (x-μ_B)/√(σ²_B+ε), then scales: y = γx̂ + β (learnable). Benefits: allows higher learning rates (less sensitive to initialization), slight regularization, reduces internal covariate shift. Used: after linear/conv layers, before activation in CNNs. NOT preferred in transformers — use LayerNorm (across features per token) because sequence lengths vary and batch size may be 1 during inference.'},
+  {id:34, cat:'dl', q:'What is attention mechanism? Why is it better than RNNs?', a:'Attention: each output position directly attends to all input positions with learned weights. Benefits over RNNs: (1) parallelizable — no sequential dependency. (2) Captures long-range dependencies in O(1) steps (RNN in O(n)). (3) No vanishing gradient over long sequences. (4) Interpretable attention weights. Limitation: O(n²) memory/compute in sequence length. Self-attention: all Q,K,V from same sequence. Cross-attention: Q from decoder, K,V from encoder.'},
+  {id:35, cat:'dl', q:'Explain BERT and GPT. What are the fundamental differences?', a:'BERT: encoder-only, bidirectional, pre-trained with Masked LM + Next Sentence Prediction. Sees full context in both directions. Good for: classification, NER, QA (extractive). GPT: decoder-only, autoregressive (causal), left-to-right LM. Good for: generation, completion, instruction following. T5: encoder-decoder, text-to-text framing, span corruption. BERT uses [CLS] token for classification. GPT uses last token or prefix prompting. Modern preference: decoder-only (GPT-style) for most tasks due to emergent few-shot abilities.'},
+  {id:36, cat:'dl', q:'What is LoRA and why is it useful for fine-tuning LLMs?', a:'LoRA (Low-Rank Adaptation): freeze pre-trained weights W₀, add trainable low-rank decomposition ΔW = BA where B∈ℝ^{d×r}, A∈ℝ^{r×k}, r ≪ min(d,k). Initialize A~N(0,σ), B=0. Forward: h = W₀x + BAx. Only train A and B. Typically reduces trainable params by 100-10000x. Applied to attention weight matrices Q,V (sometimes K,O). QLoRA combines with 4-bit NF4 quantization of W₀ for even lower memory. Merge at inference: W = W₀ + BA (zero overhead).'},
+  {id:37, cat:'dl', q:'Explain the training stability techniques used for large neural networks.', a:'Gradient clipping: clip by norm if ||g|| > threshold. Warmup: start with small lr, ramp up over N steps — avoids large updates with random init. Mixed precision (BF16/FP16): 2x memory, faster matmul, use loss scaling to prevent underflow. Gradient checkpointing: recompute activations during backward instead of storing — saves memory. Weight decay (AdamW): decouples from gradient scaling. ZeRO (DeepSpeed): shard optimizer states, gradients, parameters across GPUs.'},
+  {id:38, cat:'dl', q:'What is the difference between RNN, LSTM, and GRU?', a:'RNN: simple recurrent unit, h_t = tanh(W_h h_{t-1} + W_x x_t). Suffers vanishing gradients. LSTM: input gate (i), forget gate (f), output gate (o), cell state (c). Gates regulate info flow, cell state provides long-term memory highway. GRU: simplified with reset gate (r) and update gate (z). No separate cell state. Performance: LSTM ≈ GRU (empirically). Both largely replaced by Transformers, but still used in streaming/low-latency settings.'},
+  {id:39, cat:'dl', q:'Explain dropout and its effect during training vs inference.', a:'Training: each neuron set to zero with probability p (inverted: divide by 1-p to maintain expected value). Forces network to learn redundant representations, prevents co-adaptation. Inference: all neurons active, no scaling needed (inverted dropout handles this at training time). p=0.5 for fully-connected, 0.1-0.2 for transformers. DropPath/Stochastic depth drops whole residual blocks. Spatial dropout: drops entire feature maps (better for CNNs). MC Dropout: keep dropout at inference for uncertainty estimation.'},
+  {id:40, cat:'dl', q:'How does the self-supervised learning paradigm work?', a:'Create supervisory signal from unlabeled data itself. Pretext tasks: predict masked tokens (BERT), next token (GPT), predict rotation, colorize grayscale. Contrastive: CLIP aligns image-text pairs; SimCLR/MoCo: augmented views of same image should be close, different images far. Key insight: rich representations emerge from solving hard self-supervised tasks. Benefits: leverage huge unlabeled data, representations often better than supervised with less labeled data.'},
+  {id:41, cat:'dl', q:'What is knowledge distillation?', a:'Transfer knowledge from large teacher model to smaller student model. Soft targets: student learns to match teacher\'s softmax probabilities (not just hard labels). Temperature T softens: p_i = exp(logit_i/T) / Σexp(logit_j/T). Loss: α·CE(student, hard_label) + (1-α)·KL(student_soft||teacher_soft). Benefits: smaller model learns "dark knowledge" (inter-class similarities). Used extensively in mobile deployment. DistilBERT: 40% smaller BERT, 60% faster, 97% performance.'},
+  {id:42, cat:'dl', q:'Explain the architecture of a diffusion model.', a:'Forward: add Gaussian noise over T steps. q(xₜ|x₀) = N(xₜ; √ᾱₜ x₀, (1-ᾱₜ)I). Reverse: learn to denoise at each step. U-Net backbone with cross-attention for conditioning. Training: given xₜ and t, predict noise ε: L = ||ε - ε_θ(xₜ, t)||². Sampling: start from xₜ~N(0,I), iteratively denoise. DDIM: deterministic sampling with fewer steps (~20-50 vs 1000). Score matching: learn ∇_x log p(x). Classifier-free guidance: blend conditional and unconditional predictions.'},
+  {id:43, cat:'dl', q:'What are the key hyperparameters in transformer training and how do you tune them?', a:'Learning rate: most important. Use warmup + cosine decay. Typical range 1e-4 to 1e-3. Batch size: larger = more stable gradients, but need to scale lr (linear scaling rule). Sequence length: tradeoff with O(n²) attention cost. Weight decay: 0.01-0.1 for AdamW. β₁=0.9, β₂=0.95-0.999. Dropout: 0.1 typical. Depth vs width: depth helps more (representation power). Layer norm placement: Pre-LN more stable. Flash attention allows longer sequences.'},
+  {id:44, cat:'dl', q:'How does RLHF work and why does it improve LLM alignment?', a:'Step 1: SFT — fine-tune on high-quality demonstrations. Step 2: Reward model — collect human preferences (pairwise comparisons), train RM using Bradley-Terry model to predict P(response A preferred over B). Step 3: PPO — optimize LLM to maximize RM score while staying close to SFT model (KL penalty prevents reward hacking/collapse). DPO: simpler alternative, directly optimizes preference data without explicit RM. RLHF improves instruction following, reduces harmful outputs, aligns with human values.'},
+  {id:45, cat:'dl', q:'Explain the difference between pre-training, fine-tuning, and in-context learning.', a:'Pre-training: learn general representations from massive unlabeled data (next-token prediction, masked LM). Fine-tuning: update model weights on task-specific labeled data (full fine-tuning, LoRA, adapters). In-context learning (ICL): no weight updates, provide examples in prompt, model generalizes from context. ICL is emergent in large models. Prompt engineering: craft effective prompts without changing weights. RAG: augment context with retrieved documents. Chain-of-thought: prompt model to reason step by step.'},
+  {id:46, cat:'dl', q:'What is the role of residual connections in deep networks?', a:'Skip connections: H(x) = F(x) + x. Impact: (1) Gradient highway: ∂L/∂x = ∂L/∂H·(∂F/∂x + 1). +1 term prevents vanishing. (2) Identity shortcut: if F(x) ≈ 0, layer is identity — easy to optimize. (3) Enables training 1000+ layers. (4) Ensemble interpretation: ResNet ~ implicit ensemble of shallower networks. In transformers: residual after attention and FFN, combined with layer norm. Dense connections (DenseNet): each layer connects to all previous layers.'},
+  {id:47, cat:'dl', q:'Explain the concept of embeddings in neural networks.', a:'Embeddings: dense low-dimensional representations of discrete entities (words, users, items, graphs). Word embeddings: Word2Vec learns word vectors where similar words are nearby and semantic relationships preserved (king - man + woman ≈ queen). Training: predict context from word (Skip-gram) or word from context (CBOW). Contextual embeddings (BERT): same word different vector based on context. Item embeddings in recommendation: dot product ≈ affinity. Training signals: co-occurrence, user behavior, supervised tasks.'},
+  {id:48, cat:'dl', q:'How do you evaluate generative models?', a:'Image: FID (Frechet Inception Distance) — lower is better, compares feature distribution statistics. IS (Inception Score) — quality + diversity. CLIP score — image-text alignment. Text: perplexity — lower means better language model. BLEU/ROUGE for translation/summarization — n-gram overlap (poor for diversity). BERTScore — semantic similarity. Human eval: gold standard but expensive. For chat: MT-Bench, MMLU, AlpacaEval. Diversity: coverage, entropy of generated samples.'},
+  {id:49, cat:'dl', q:'What is attention masking and causal masking?', a:'Padding mask: in a batch, sequences have different lengths, padded with zeros. Mask prevents attending to padding positions (set to -∞ before softmax). Causal/autoregressive mask (GPT): prevent position t from attending to positions t+1, ..., n. Implemented as upper triangular mask. Necessary for proper language modeling. In BERT (encoder): no causal mask — bidirectional attention. In cross-attention: decoder attends to full encoder output, uses padding mask only. Flash attention handles masking efficiently.'},
+  {id:50, cat:'dl', q:'Explain quantization in neural networks.', a:'Reduce precision of weights/activations: FP32 → FP16 → INT8 → INT4. Benefits: 2-8x memory reduction, 2-4x speedup. Post-training quantization (PTQ): calibrate with small unlabeled dataset. Quantization-aware training (QAT): simulate quantization during training with straight-through estimator. GPTQ: layer-wise PTQ for LLMs using second-order information. AWQ: activation-aware weight quantization. NF4 (QLoRA): 4-bit NormalFloat, theoretically optimal for normally distributed weights. Quality loss: negligible for INT8, small for INT4 with good methods.'},
+  {id:51, cat:'dl', q:'How does word2vec work? Explain skip-gram and CBOW.', a:'Word2Vec: represent words as dense vectors. Skip-gram: given center word, predict surrounding context words. Objective: max Σlog P(context|center). Negative sampling: instead of full softmax, predict word vs k random noise words. CBOW: given context window, predict center word — faster but skip-gram better for rare words. Training: embeddings emerge to encode semantic similarity. Extensions: GloVe (global co-occurrence statistics), FastText (subword n-grams, handles OOV). Contextual limitation: fixed vector regardless of context — replaced by BERT-style models.'},
+  {id:52, cat:'dl', q:'What are mixture of experts (MoE) models?', a:'MoE: replace FFN layers with N expert FFNs. Router decides which expert(s) process each token. Sparse MoE: activate only top-k experts per token (k=1 or 2). Benefits: scale parameters without proportionally scaling compute. Examples: Mixtral 8x7B (top-2 routing), GPT-4 rumored to use MoE. Training challenges: load balancing (auxiliary loss prevents all tokens routing to same expert), communication overhead in distributed training. Capacity factor controls expert overflow handling.'},
+  {id:53, cat:'dl', q:'Explain the concept of neural architecture search (NAS).', a:'Automatically search for optimal network architecture. Search space: layers, connections, operations (conv, attention, etc.). Search strategy: RL (NASNet), evolutionary, gradient-based (DARTS). Evaluation: train proxy, weight sharing (train supernet once, inherit weights). Results: EfficientNet (compound scaling), MobileNet, AmoebaNet. Hardware-aware NAS: optimize for latency/energy on target device. Limitation: search cost (GPUdays), found architectures may not transfer to different tasks/scales.'},
+  {id:54, cat:'dl', q:'How does contrastive learning work (SimCLR, CLIP)?', a:'SimCLR: two augmented views of same image should be close, different images far. Loss: InfoNCE/NT-Xent, normalized temperature-scaled cross-entropy. Large batch (4096+) provides many negatives. MoCo: momentum encoder + queue maintains large key set. CLIP (OpenAI): align image-text pairs. Encode image and text separately, maximize similarity for matched pairs, minimize for non-matched. Zero-shot transfer: compare image embedding to text descriptions of classes. Enables flexible classification without task-specific training.'},
+  {id:55, cat:'dl', q:'What is gradient checkpointing and when would you use it?', a:'Trade compute for memory: don\'t store all activations during forward pass. Recompute them during backward pass. Reduces memory from O(n_layers) to O(√n_layers). Cost: ~33% more compute. Use when: training very deep models that OOM, very long sequences, large batch sizes. PyTorch: torch.utils.checkpoint.checkpoint(fn, inputs). Activation offloading (CPU): even more memory savings at latency cost. Combined with ZeRO and mixed precision for extreme memory efficiency.'},
+  // Statistics (56-75)
+  {id:56, cat:'stat', q:'Explain p-value. What are common misconceptions?', a:'P-value: P(observing data at least as extreme as we got | H₀ true). Common misconceptions: (1) NOT P(H₀ is true). (2) NOT the probability the result occurred by chance. (3) Small p ≠ large effect (with huge n, trivial effects become significant). (4) p > 0.05 doesn\'t prove H₀. Correct use: p < α means "statistically unlikely under H₀", not "practically important". Always report effect size + confidence interval alongside p-value. Multiple testing correction: Bonferroni, BH procedure.'},
+  {id:57, cat:'stat', q:'How do you design an A/B test from scratch?', a:'1. Define hypothesis and minimum detectable effect (MDE). 2. Calculate sample size: n = 2σ²(z_α + z_β)²/δ² or use Evan Miller\'s tool. 3. Randomization: user-level, ensure no interference. 4. Choose metrics: primary (north star) + guardrail metrics. 5. Pre-register test (avoid peeking bias). 6. Run until sample size reached. 7. Check SRM (sample ratio mismatch). 8. Two-sided t-test or Mann-Whitney. 9. Report effect size + CI. 10. Decision framework for shipping.'},
+  {id:58, cat:'stat', q:'What is the central limit theorem and why is it important for ML?', a:'CLT: sum/mean of n iid random variables → Normal distribution as n→∞, regardless of underlying distribution. Requirements: finite mean and variance, independence. Why ML: (1) Foundation of hypothesis testing (t-tests, z-tests). (2) Justifies using normal approximation for many estimators. (3) Sample means are normally distributed — A/B test stats rely on this. (4) Gradient in mini-batch SGD ~ sum of iid per-sample gradients → approximately normal → explains why noise helps escape saddle points.'},
+  {id:59, cat:'stat', q:'Explain Bayesian A/B testing vs frequentist.', a:'Frequentist: fix α, compute p-value, binary reject/fail-to-reject. Must pre-determine sample size. Bayesian: compute P(variant B better | data). Can monitor continuously, make decisions at any point, incorporate priors. Bayesian: "There is 95% probability variant B lifts revenue by 2-5%". Frequentist: "If H₀ true, 5% chance of seeing this data." Bayesian advantages: more intuitive, no peeking problem, natural handling of multiple testing. Limitation: prior choice, computation. Tools: Thompson sampling for online decisions.'},
+  {id:60, cat:'stat', q:'What is the multiple testing problem and how do you handle it?', a:'Testing m hypotheses simultaneously: expected false positives = α·m. FWE (familywise error) control: Bonferroni (α/m) — conservative, powerful only for few tests. FWER alternatives: Holm-Bonferroni (more powerful). FDR (false discovery rate): BH procedure (Benjamini-Hochberg) — control expected proportion of FP among rejections. Sort p-values p(1)≤...≤p(m), reject all p(k) ≤ k·α/m. FDR more appropriate when testing many metrics. Practical: pre-register primary metric, treat secondary as exploratory.'},
+  {id:61, cat:'stat', q:'Explain the difference between Type I and Type II errors in the context of product decisions.', a:'Type I (false positive, α): conclude variant is better when it isn\'t → ship a bad feature. Cost: degraded user experience, wasted engineering resources. Type II (false negative, β): miss a truly better variant → fail to ship good feature. Cost: missed business opportunity. Power (1-β): probability of detecting true effect. Tradeoff: lower α → higher β (fewer false positives, more false negatives). Choose based on asymmetric costs. Medical: low α (don\'t approve ineffective drug). Tech: higher α ok for minor features.'},
+  {id:62, cat:'stat', q:'What is CUPED and how does it reduce variance in A/B testing?', a:'CUPED (Controlled-experiment Using Pre-Experiment Data): use pre-experiment metric to reduce variance. Y_cuped = Y - θ(X - E[X]) where X is pre-experiment data. θ* = Cov(Y,X)/Var(X) minimizes variance. Y_cuped has same expectation as Y but variance reduced by (1-ρ²)×100% where ρ = Corr(Y,X). Practical: pre-period of 1-4 weeks. Often reduces variance 30-70%, equivalent to 50-230% more samples. Implementation: regression adjustment or direct formula. Used extensively at Microsoft, Airbnb, Booking.com.'},
+  {id:63, cat:'stat', q:'Explain maximum likelihood estimation with an example.', a:'MLE: find parameters θ that maximize probability of observed data. L(θ|X) = Π P(xᵢ|θ). Maximize log-likelihood (sum, numerically stable). Example — Gaussian: logL(μ,σ²) = -n/2·log(2πσ²) - Σ(xᵢ-μ)²/(2σ²). Taking derivatives: μ̂_MLE = x̄ (sample mean). σ²_MLE = Σ(xᵢ-x̄)²/n (biased! divide by n-1 for unbiased). Connection to ML: least squares = MLE under Gaussian noise. Cross-entropy = MLE for categorical distribution.'},
+  {id:64, cat:'stat', q:'How do you estimate sample size for an experiment?', a:'Need: significance level α (typ. 0.05), power 1-β (typ. 0.80), minimum detectable effect δ, baseline metric variance σ². n = 2σ²(z_{α/2} + z_β)²/δ². For proportions: σ² = p(1-p). Two-sided test: use z_{0.025}=1.96. For power=0.8: z_{0.2}=0.84. Example: p=0.1, MDE=0.01 → n ≈ 35,000 per group. Common mistake: using too small δ → unrealistic sample size. Run power analysis for guardrail metrics too. Increasing MDE or α dramatically reduces required n.'},
+  {id:65, cat:'stat', q:'What is Simpson\'s paradox? Give an example.', a:'A trend appears in several groups of data but disappears/reverses when groups are combined. Example: Drug A vs B. Men: A better. Women: A better. Combined: B better — because drug B was preferentially given to women who had better outcomes overall. Cause: confounding variable correlated with both treatment and outcome. Resolution: always stratify by confounders. Detection: Causal graph — check if grouping variable is a confounder or collider. Important for ML: model performance by demographic may reveal this pattern.'},
+  {id:66, cat:'stat', q:'Explain bootstrapping and when it is useful.', a:'Bootstrap: resample with replacement from data B times. Compute statistic of interest each time. Estimate CI from empirical distribution of bootstrap statistics. Use when: analytical CI formula doesn\'t exist, distribution unknown or non-normal, small sample sizes, complex statistics (correlation, AUC, custom). Percentile CI: [2.5th, 97.5th percentile of bootstrap distribution]. BCa (bias-corrected accelerated): better for skewed distributions. Limitation: assumes data is representative of population.'},
+  {id:67, cat:'stat', q:'What is the difference between correlation and causation? How do you establish causation?', a:'Correlation: statistical association between X and Y (Pearson r, Spearman ρ). May be spurious (ice cream sales and drownings both increase in summer — caused by temperature). Causation: X directly causes Y. Requires: temporal precedence, covariation, ruling out alternatives. Establish causation: (1) RCT/A-B test — gold standard. (2) Natural experiments: IV, RD, DiD. (3) Structural causal models (Pearl\'s do-calculus). (4) Propensity score methods for observational data. Always draw the DAG first.'},
+  {id:68, cat:'stat', q:'Explain the concept of statistical power and how to increase it.', a:'Power = P(reject H₀ | H₁ true) = 1-β. Typically want 0.80. Factors: effect size (larger → more power), sample size (larger → more power), significance level α (larger → more power), test type (one-sided > two-sided, paired > independent). Ways to increase power: (1) More data. (2) CUPED variance reduction. (3) Stratified randomization by covariates. (4) Increase α (trade false positive risk). (5) Improve measurement precision (reduce σ). (6) Focus on higher-traffic segments first.'},
+  {id:69, cat:'stat', q:'What is a confidence interval and how is it interpreted?', a:'CI: range of plausible values for parameter θ. 95% CI: "If we repeated this experiment many times, 95% of such intervals would contain the true θ." NOT: "95% probability that θ is in this interval." Construction: x̄ ± z_{α/2} · σ/√n (known σ) or x̄ ± t_{α/2,n-1} · s/√n (unknown σ). Width ∝ σ/√n → more data → narrower CI. For non-normal data or small n: bootstrap CI. Report CI alongside p-value — encodes effect size + uncertainty.'},
+  {id:70, cat:'stat', q:'Explain Naive Bayes classifier. Why is it naive and when does it work well?', a:'Assumes features are conditionally independent given class: P(x₁,...,xₙ|y) = Π P(xᵢ|y). This is the "naive" assumption — almost never true. Yet works surprisingly well for text (Bag of Words NB), spam detection, document classification. Why: even with wrong joint distribution, classification boundary can be correct. Advantages: very fast, interpretable, works with small data, handles high dimensions (few params), works well when features have little correlation. Laplace smoothing prevents P=0 for unseen feature-class pairs.'},
+  {id:71, cat:'stat', q:'How do you detect and handle outliers in a dataset?', a:'Detection: statistical (Z-score > 3, IQR method: [Q1-1.5*IQR, Q3+1.5*IQR]), Isolation Forest (anomaly score), DBSCAN (noise points), visualization (box plot, scatter). Decision: (1) True outliers/errors → remove or cap. (2) Valid but extreme → robust methods (Huber loss, RobustScaler, median instead of mean). (3) Anomalies of interest (fraud) → keep, flag, model separately. Winsorization: cap at percentiles (1st, 99th). Never remove without understanding why.'},
+  {id:72, cat:'stat', q:'Explain the difference between frequentist CI and Bayesian credible interval.', a:'Frequentist 95% CI: "95% of CIs constructed this way contain the true parameter." The parameter is fixed (not random). CI either does or doesn\'t contain θ — no probability statement about this specific interval. Bayesian 95% CrI (credible interval): "Given the data, P(θ ∈ [a,b]) = 0.95." Parameter is random (has posterior distribution). This is the intuitive interpretation people want from a CI. To use: need a prior P(θ). With large data, both usually agree. CrI is narrower if prior is informative.'},
+  {id:73, cat:'stat', q:'What is the difference between parametric and non-parametric statistical tests?', a:'Parametric: assume underlying distribution (usually normal). t-test (means), F-test (variances), ANOVA. Valid when CLT applies (n>30) or data is normal. Non-parametric: distribution-free. Mann-Whitney U (compare two groups), Kruskal-Wallis (ANOVA analog), Spearman correlation, Chi-squared test. Use when: small n, heavy tails, ordinal data, assumptions violated. Tradeoff: parametric tests more powerful when assumptions hold; non-parametric more robust. Permutation tests: most flexible non-parametric approach.'},
+  {id:74, cat:'stat', q:'How do you approach model calibration? What is calibration?', a:'Calibration: predicted probability = actual frequency. If model says P(spam)=0.8, then 80% of such emails should be spam. Measure: reliability diagram (plot mean predicted prob vs actual fraction per bin). ECE (Expected Calibration Error). Platt scaling: fit logistic regression on model scores. Isotonic regression: non-parametric monotone transformation. Temperature scaling: for neural nets, divide logits by T (learned on validation set). Poor calibration: common in boosting (overconfident) and neural nets (overconfident without calibration).'},
+  {id:75, cat:'stat', q:'Explain difference-in-differences (DiD) and its assumptions.', a:'DiD: causal method for natural experiments. ATT = (treated_after - treated_before) - (control_after - control_before). Differences out time trends and time-invariant confounders. Key assumption: parallel trends — in absence of treatment, treatment and control groups would have evolved in parallel. Check: pre-treatment trends should be parallel (event study plot). Extension: staggered DiD when treatment rolled out at different times (careful with two-way FE — Callaway-Sant\'Anna or Sun-Abraham more robust). Placebo tests: use pre-period as fake treatment.'},
+  // System Design (76-88)
+  {id:76, cat:'sys', q:'Design a recommendation system for an e-commerce platform like Amazon.', a:'Multi-stage pipeline: (1) Candidate generation: collaborative filtering (user-item MF), content-based (item features), popular/trending, session-based. (2) Ranking: gradient boosted trees or DNN with user+item+context features, optimize for long-term value not just CTR. (3) Re-ranking: diversity, business rules, fairness constraints. Features: purchase history, browse history, search queries, item attributes, demographic, real-time session. Serving: two-tower + ANN for retrieval, features from feature store, A/B test variants. Metrics: CTR, conversion, revenue, long-term engagement.'},
+  {id:77, cat:'sys', q:'Design a fraud detection system for a payment platform.', a:'Real-time (< 100ms): rule-based + lightweight model (logistic regression/GBT) on transaction features (amount, merchant, location, velocity). Batch: deep learning on transaction graph/sequences, review flagged transactions. Features: transaction amount/type, IP/device fingerprint, velocity (n transactions in last hour), geolocation anomaly, merchant category. Labels: chargeback signals (delayed). Imbalance: 0.1% fraud rate. Metrics: F1 at P(fraud > threshold), dollar value of fraud caught. Feedback loop: analyst decisions → retraining. Champion/challenger deployment.'},
+  {id:78, cat:'sys', q:'How would you design the ML pipeline for search ranking at Microsoft/Bing?', a:'Query understanding: intent classification, entity recognition, spelling correction, query expansion. Retrieval: inverted index, BM25 baseline, dual encoder for dense retrieval. Ranking: LambdaMART/LightGBM with pointwise + pairwise + listwise losses. Features: query-document match (BM25, tf-idf, semantic), document quality (pagerank, freshness, authority), user behavior (CTR, dwell time from historical logs), query context (location, time). Training data: human relevance judgments + implicit feedback. Metrics: NDCG@k, MRR. Online: A/B test with interleaving for sensitivity.'},
+  {id:79, cat:'sys', q:'How do you address training-serving skew in production ML systems?', a:'Training-serving skew: model trained on different data distribution than it sees at inference. Causes: feature computation differences (train=batch, serve=online), data leakage in training, drift after deployment. Prevention: (1) Feature store ensures identical feature computation. (2) Validate feature distributions between training and serving. (3) Log production features and periodically retrain. (4) Shadow evaluation: run new model on production traffic, compare. (5) Data pipelines: same code for both. Detection: monitor prediction distribution drift (KL divergence, PSI score).'},
+  {id:80, cat:'sys', q:'Design an ML system for content moderation at scale.', a:'Multi-label classification: hate speech, spam, NSFW, misinformation. Multi-modal: text (BERT/LLM), image (ViT/CLIP), video (frame sampling + temporal). Tiered system: (1) Rule-based (fast, high precision for known patterns). (2) ML model (recall-focused, flag for review). (3) Human review queue (novel/uncertain cases). Active learning: prioritize uncertain samples for labeling. Adversarial robustness: adversaries adapt, need frequent retraining. Fairness: evaluate across demographics and languages. Appeals pipeline. Metrics: precision, recall, false positive rate by category.'},
+  {id:81, cat:'sys', q:'How would you approach building a real-time personalization system?', a:'Components: (1) Feature store — offline (user history, computed nightly) + online (current session, last N clicks, low-latency). (2) Model — two-tower retrieval + ranker. (3) Serving — model server with caching, fallback to popular items. (4) Feedback loop — log impressions + clicks → offline training. Real-time signals: current session context, trending items (last 1hr), user\'s recent search. Latency budget: <100ms total. Caching: pre-compute top-N for frequent users. Cold start: content-based or popularity until enough interactions.'},
+  {id:82, cat:'sys', q:'What are the key considerations when deploying an LLM in production?', a:'Latency: speculative decoding (5-10x speedup), quantization (INT8), optimized inference servers (vLLM, TGI, TensorRT-LLM). Cost: KV cache optimization (PagedAttention), continuous batching, GPU utilization. Safety: content filters, PII detection, rate limiting, prompt injection prevention. Observability: log prompts/responses (sampled), latency P50/P99, error rates, model drift. Retrieval augmentation: ground LLM with fresh/private knowledge. Versioning: blue-green deployment. Fine-tuning cadence: evaluate on eval set before every deployment.'},
+  {id:83, cat:'sys', q:'How do you handle concept drift in production models?', a:'Detection: monitor input feature distribution (KS test, PSI), monitor prediction distribution, monitor model performance metrics (if labels available with delay). Types: sudden (new policy), gradual (seasonal), recurrent (periodic). Response: (1) Scheduled retraining (periodic, e.g., weekly). (2) Triggered retraining (when drift score exceeds threshold). (3) Online learning (stream updates, risky for stability). (4) Ensemble with recency-weighted voting. (5) Feature-specific detection: which features drifted? Domain adaptation techniques if full retraining expensive.'},
+  {id:84, cat:'sys', q:'Explain the architecture of a feature store and why it is important.', a:'Feature store: centralized repository for ML features. Components: (1) Offline store (data warehouse — Hive, BigQuery) for batch training, historical point-in-time lookup. (2) Online store (Redis, DynamoDB) for low-latency (<10ms) serving. (3) Feature registry: metadata, ownership, monitoring. (4) Ingestion pipeline: batch + streaming. Key properties: time-travel queries (avoid leakage in training), consistency (same compute train + serve), discoverability (share features across teams). Examples: Feast (open source), Tecton, AWS SageMaker Feature Store, Databricks Feature Store.'},
+  {id:85, cat:'sys', q:'How would you design an A/B testing platform at scale?', a:'Assignment service: deterministic hashing (user_id + experiment_id → bucket) for consistency, exposure logging, traffic splitting. Configuration service: experiment definitions, metrics, statistical engine. Data pipeline: event collection → warehouse → metrics computation. Statistical analysis: automated hypothesis testing, CUPED, sequential testing, multiple testing correction. Guardrails: auto-stop if guardrail metric degrades. Reporting: interactive dashboards, segmentation analysis. Experiment registry: dependencies, mutual exclusion, namespace management. Ramp: gradual traffic increase.'},
+  {id:86, cat:'sys', q:'How do you ensure fairness in ML models?', a:'Metrics: demographic parity (equal positive rates across groups), equalized odds (equal TPR and FPR), calibration across groups. Detection: slice-based evaluation, disparate impact analysis. Mitigation: (1) Pre-processing: reweighting, resampling. (2) In-processing: fairness constraints in objective (Lagrangian relaxation). (3) Post-processing: threshold calibration per group, reject option classification. Tradeoffs: different fairness definitions often mathematically incompatible (COMPAS controversy). Auditing: regular red-teaming, external review. Documentation: model cards, data sheets.'},
+  {id:87, cat:'sys', q:'What metrics would you use to evaluate a search ranking system?', a:'Offline: NDCG@k (normalized discounted cumulative gain, accounts for position), MAP (mean average precision), MRR (mean reciprocal rank for first relevant result), Precision@k. NDCG: DCG = Σ (2^rel_i - 1)/log₂(i+1). Normalize by ideal ranking (IDCG). Online: CTR by position, click-through rate, abandonment rate, reformulation rate, dwell time, task completion. Human eval: relevance judgments (0-4 scale), interleaving tests (interleave two rankers, track which gets more clicks). North star: session success rate.'},
+  {id:88, cat:'sys', q:'How would you design a system to detect anomalies in time series data at scale?', a:'Rule-based baseline: static thresholds, rate-of-change. Statistical: ARIMA residuals, seasonal decomposition (STL), Prophet (Facebook). ML: Isolation Forest, LSTM autoencoder (reconstruction error), One-class SVM. Pattern-specific: spikes (z-score with seasonal adjustment), level shifts (CUSUM), trend changes (Bayesian change point). Scale: online learning for low-latency, stream processing (Kafka + Flink), hierarchical detection (fleet-wide vs per-server). Feedback: analyst labels → retraining. Alerting: fatigue management, alert deduplication, context enrichment.'},
+  // Coding (89-100)
+  {id:89, cat:'coding', q:'Implement k-means clustering from scratch.', a:'def kmeans(X, k, n_iters=100, tol=1e-4):\n  centroids = X[np.random.choice(len(X), k, replace=False)]\n  for _ in range(n_iters):\n    # E-step: assign clusters\n    dists = np.linalg.norm(X[:, None] - centroids[None, :], axis=-1)  # (n, k)\n    labels = np.argmin(dists, axis=1)\n    # M-step: update centroids\n    new_centroids = np.array([X[labels == j].mean(axis=0) for j in range(k)])\n    if np.max(np.abs(new_centroids - centroids)) < tol: break\n    centroids = new_centroids\n  return labels, centroids'},
+  {id:90, cat:'coding', q:'Implement logistic regression with gradient descent.', a:'class LogisticRegression:\n  def fit(self, X, y, lr=0.01, n_iters=1000):\n    n, d = X.shape\n    self.w = np.zeros(d); self.b = 0\n    for _ in range(n_iters):\n      z = X @ self.w + self.b\n      y_hat = 1 / (1 + np.exp(-z))       # sigmoid\n      dw = X.T @ (y_hat - y) / n\n      db = (y_hat - y).mean()\n      self.w -= lr * dw\n      self.b -= lr * db\n  def predict_proba(self, X):\n    return 1 / (1 + np.exp(-(X @ self.w + self.b)))'},
+  {id:91, cat:'coding', q:'Write a function to compute precision, recall, and F1 from scratch.', a:'def metrics(y_true, y_pred):\n  tp = ((y_pred == 1) & (y_true == 1)).sum()\n  fp = ((y_pred == 1) & (y_true == 0)).sum()\n  fn = ((y_pred == 0) & (y_true == 1)).sum()\n  precision = tp / (tp + fp + 1e-9)\n  recall    = tp / (tp + fn + 1e-9)\n  f1 = 2 * precision * recall / (precision + recall + 1e-9)\n  return dict(precision=precision, recall=recall, f1=f1)\n\n# For multi-class: use macro (average over classes) or micro (aggregate TP/FP/FN)'},
+  {id:92, cat:'coding', q:'Implement scaled dot-product attention in PyTorch.', a:'import torch\nimport torch.nn.functional as F\n\ndef attention(Q, K, V, mask=None):\n    d_k = Q.size(-1)\n    scores = torch.matmul(Q, K.transpose(-2, -1)) / (d_k ** 0.5)\n    if mask is not None:\n        scores = scores.masked_fill(mask == 0, -1e9)\n    weights = F.softmax(scores, dim=-1)\n    return torch.matmul(weights, V), weights\n\n# Multi-head: project Q,K,V h times, concat outputs'},
+  {id:93, cat:'coding', q:'Write a function to implement SMOTE for oversampling.', a:'def smote(X, y, k=5, ratio=1.0):\n  minority = X[y == 1]\n  n_synthetic = int(len(X[y == 0]) * ratio) - len(minority)\n  from sklearn.neighbors import NearestNeighbors\n  nn = NearestNeighbors(n_neighbors=k+1).fit(minority)\n  _, indices = nn.kneighbors(minority)\n  synthetic = []\n  for i in range(n_synthetic):\n    idx = np.random.randint(len(minority))\n    nn_idx = indices[idx][np.random.randint(1, k+1)]\n    lam = np.random.random()\n    synthetic.append(minority[idx] + lam * (minority[nn_idx] - minority[idx]))\n  return np.vstack([X, synthetic]), np.hstack([y, np.ones(n_synthetic)])'},
+  {id:94, cat:'coding', q:'Implement a basic decision tree from scratch.', a:'class Node:\n  def __init__(self, feat=None, thresh=None, left=None, right=None, val=None):\n    self.feat, self.thresh, self.left, self.right, self.val = feat, thresh, left, right, val\n\ndef gini(y): ps = np.bincount(y)/len(y); return 1 - (ps**2).sum()\n\ndef best_split(X, y):\n  best_ig, best_feat, best_thresh = -np.inf, None, None\n  base = gini(y)\n  for f in range(X.shape[1]):\n    for t in np.unique(X[:, f]):\n      mask = X[:, f] <= t\n      ig = base - (mask.sum()*gini(y[mask]) + (~mask).sum()*gini(y[~mask])) / len(y)\n      if ig > best_ig: best_ig, best_feat, best_thresh = ig, f, t\n  return best_feat, best_thresh'},
+  {id:95, cat:'coding', q:'How would you efficiently compute pairwise cosine similarity for large embedding matrices?', a:'# For embedding matrices E1 (n x d) and E2 (m x d)\nimport torch\nimport torch.nn.functional as F\n\ndef pairwise_cosine(E1, E2):\n    E1_norm = F.normalize(E1, dim=-1)  # (n, d)\n    E2_norm = F.normalize(E2, dim=-1)  # (m, d)\n    return E1_norm @ E2_norm.T          # (n, m)\n\n# For very large n, m: use FAISS for approximate nearest neighbor\nimport faiss\nindex = faiss.IndexFlatIP(d)  # inner product = cosine if normalized\nindex.add(E2_norm.numpy())\nscores, indices = index.search(E1_norm.numpy(), k=10)'},
+  {id:96, cat:'coding', q:'Write a function to perform stratified k-fold cross-validation.', a:'def stratified_kfold_cv(X, y, model, k=5, metric=None):\n  from collections import defaultdict\n  classes = np.unique(y)\n  class_indices = {c: np.where(y==c)[0] for c in classes}\n  for c in classes: np.random.shuffle(class_indices[c])\n  folds = [[] for _ in range(k)]\n  for c in classes:\n    for i, idx in enumerate(class_indices[c]):\n      folds[i % k].append(idx)\n  scores = []\n  for i in range(k):\n    val_idx = folds[i]\n    tr_idx = [j for fold in folds for j in fold if fold is not folds[i]]\n    model.fit(X[tr_idx], y[tr_idx])\n    scores.append(metric(y[val_idx], model.predict(X[val_idx])))\n  return np.array(scores)'},
+  {id:97, cat:'coding', q:'How would you implement early stopping in a training loop?', a:'class EarlyStopping:\n  def __init__(self, patience=5, delta=1e-4):\n    self.patience = patience; self.delta = delta\n    self.best = np.inf; self.counter = 0; self.stopped = False\n\n  def step(self, val_loss, model):\n    if val_loss < self.best - self.delta:\n      self.best = val_loss; self.counter = 0\n      torch.save(model.state_dict(), "best.pt")  # save checkpoint\n    else:\n      self.counter += 1\n      if self.counter >= self.patience:\n        self.stopped = True\n        model.load_state_dict(torch.load("best.pt"))  # restore best'},
+  {id:98, cat:'coding', q:'Write SQL to find the top 3 products per category by revenue.', a:'-- Using RANK window function\nWITH ranked AS (\n  SELECT \n    category,\n    product_id,\n    SUM(revenue) AS total_revenue,\n    RANK() OVER (\n      PARTITION BY category \n      ORDER BY SUM(revenue) DESC\n    ) AS rank\n  FROM sales\n  GROUP BY category, product_id\n)\nSELECT category, product_id, total_revenue\nFROM ranked\nWHERE rank <= 3\nORDER BY category, rank;\n\n-- Use DENSE_RANK() if you want ties to count (e.g., two #1 items → no #2)'},
+  {id:99, cat:'coding', q:'How do you implement a learning rate warmup + cosine decay schedule?', a:'import numpy as np\n\ndef get_lr(step, warmup_steps, total_steps, max_lr, min_lr=1e-5):\n    if step < warmup_steps:\n        return max_lr * step / warmup_steps  # linear warmup\n    progress = (step - warmup_steps) / (total_steps - warmup_steps)\n    return min_lr + 0.5 * (max_lr - min_lr) * (1 + np.cos(np.pi * progress))\n\n# PyTorch\nscheduler = torch.optim.lr_scheduler.OneCycleLR(\n    optimizer, max_lr=1e-3, steps_per_epoch=1000, epochs=10,\n    pct_start=0.1,  # 10% warmup\n    anneal_strategy="cos"\n)'},
+  {id:100, cat:'coding', q:'Implement a simple neural network in PyTorch with training loop.', a:'import torch\nimport torch.nn as nn\n\nclass MLP(nn.Module):\n  def __init__(self, dims):\n    super().__init__()\n    layers = []\n    for i in range(len(dims)-1):\n      layers += [nn.Linear(dims[i], dims[i+1]), nn.ReLU()]\n    self.net = nn.Sequential(*layers[:-1])  # drop last ReLU\n  def forward(self, x): return self.net(x)\n\nmodel = MLP([128, 256, 128, 1])\nopt = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-2)\nloss_fn = nn.BCEWithLogitsLoss()\n\nfor epoch in range(100):\n  for xb, yb in loader:\n    opt.zero_grad()\n    loss_fn(model(xb).squeeze(), yb).backward()\n    torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)\n    opt.step()'}
+];
+
+let currentFilter = 'all';
+let currentSearch = '';
+
+function renderQA() {
+  const list = document.getElementById('qa-list');
+  let filtered = qaData;
+  if (currentFilter !== 'all') filtered = filtered.filter(q => q.cat === currentFilter);
+  if (currentSearch) filtered = filtered.filter(q => 
+    q.q.toLowerCase().includes(currentSearch) || q.a.toLowerCase().includes(currentSearch)
+  );
+  list.innerHTML = filtered.map(qa => `
+    <div class="qa-item" id="qa-${qa.id}">
+      <div class="qa-q" onclick="toggleQA(${qa.id})">
+        <span class="qa-num">${qa.id}</span>
+        <span class="qa-text">${qa.q}</span>
+        <span class="qa-chevron">▶</span>
+      </div>
+      <div class="qa-a"><pre style="white-space:pre-wrap;font-family:var(--font-sans);font-size:13px;background:none;border:none;padding:0;margin:0;color:var(--color-text-secondary)">${qa.a}</pre></div>
+    </div>
+  `).join('');
+}
+
+function toggleQA(id) {
+  document.getElementById('qa-'+id).classList.toggle('open');
+}
+
+function setFilter(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderQA();
+}
+
+function filterQA() {
+  currentSearch = document.getElementById('qa-search').value.toLowerCase();
+  renderQA();
+}
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  event && event.target && event.target.classList.add('active');
+  // update nav button
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'"+id+"'")) b.classList.add('active');
+  });
+}
+
+function toggleCard(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+renderQA();
+</script>
