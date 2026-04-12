@@ -1,0 +1,1 @@
+Feel free to check out these notes if you are targetting applied scientist roles or just need material to study, feel free to download these. I have also included the Understanding Deep Learning. Feel free to check this out too. 
